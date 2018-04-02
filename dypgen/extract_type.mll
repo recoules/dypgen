@@ -121,10 +121,10 @@ and replace_tpar oldtp newtp = parse
     let len = String.length r in
     let s = String.sub r 1 (len-2) in
     if s = oldtp then
-      (let s = "'"^newtp^" " in
-      let len2 = String.length s in
-      s.[len2-1] <- r.[len-1];
-      Buffer.add_string string_buf s)
+      (let s = Bytes.of_string ("'"^newtp^" ") in
+      let len2 = Bytes.length s in
+      Bytes.set s (len2-1) r.[len-1];
+      Buffer.add_bytes string_buf s)
     else
       Buffer.add_string string_buf r;
     replace_tpar oldtp newtp lexbuf }
@@ -137,12 +137,14 @@ and fix_variant fun_typ = parse
   | [^'_''['] * eof { () }
   | "_[" ['<''>']
     { let i = Lexing.lexeme_start lexbuf in
-    fun_typ.[i] <- ' '; fun_typ.[i+2] <- ' ';
-    fix_variant fun_typ lexbuf}
+    let fun_typ = Bytes.of_string fun_typ in
+    Bytes.set fun_typ i ' '; Bytes.set fun_typ (i+2) ' ';
+    fix_variant (Bytes.to_string fun_typ) lexbuf}
   | "[" ['<''>']
     { let i = Lexing.lexeme_start lexbuf in
-    fun_typ.[i+1] <- ' ';
-    fix_variant fun_typ lexbuf}
+    let fun_typ = Bytes.of_string fun_typ in
+    Bytes.set fun_typ (i+1) ' ';
+    fix_variant (Bytes.to_string fun_typ) lexbuf}
   | [^'_''['] + { fix_variant fun_typ lexbuf }
   | ['_''['] { fix_variant fun_typ lexbuf }
 

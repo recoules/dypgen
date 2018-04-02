@@ -5081,9 +5081,9 @@ let next_lexeme_precur_lb_pdev lexbuf pdev gd ld =
         res
     | None, (Some ((action_id_l, pdev, _),_)) ->
       let lexeme =
-        try String.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len
+        try Bytes.to_string (Bytes.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len)
         with Invalid_argument("String.sub") ->
-          (Printf.printf "1; %s\n" lexbuf.lb_lexbuf.lex_buffer;
+          (Printf.printf "1; %s\n" (Bytes.to_string (lexbuf.lb_lexbuf.lex_buffer));
           raise (Invalid_argument("String.sub")))
       in
        (if !dypgen_verbose>2 then
@@ -5091,7 +5091,7 @@ let next_lexeme_precur_lb_pdev lexbuf pdev gd ld =
        next_token (lexeme::res))
     | (Some ((action_id_l, pdev, _),_)), _ ->
       let lexeme =
-        try String.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len
+        try Bytes.to_string (Bytes.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len)
         with Invalid_argument("String.sub") ->
           (Printf.printf "2; %i, %i\n" prev_curr_pos len;
           raise (Invalid_argument("String.sub")))

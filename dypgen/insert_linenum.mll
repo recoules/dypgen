@@ -1,7 +1,7 @@
 {
 open Lexing
 
-let buffer = ref ""
+let buffer = ref (Bytes.empty)
 
 let update_loc lexbuf file line absolute chars =
   let pos = lexbuf.lex_curr_p in
@@ -24,12 +24,12 @@ rule insert_linenum = parse
       insert_linenum lexbuf }
   | "# insert-line-number"
       { let pos = Lexing.lexeme_start_p lexbuf in
-      let space = String.make 20 ' ' in
+      let space = Bytes.make 20 ' ' in
       let str = "# "^(string_of_int (pos.pos_lnum+1)) in
-      String.blit str 0 space 0 (String.length str);
-      String.blit space 0 !buffer pos.pos_cnum 20;
+      Bytes.blit_string str 0 space 0 (String.length str);
+      Bytes.blit space 0 !buffer pos.pos_cnum 20;
       insert_linenum lexbuf }
-  | eof { let result = !buffer in buffer := ""; result }
+  | eof { let result = !buffer in buffer := Bytes.empty; Bytes.to_string result }
   | [^'#''\010''\013']+ { insert_linenum lexbuf }
   | _ { insert_linenum lexbuf }
 

@@ -1620,7 +1620,7 @@ let parser_code = String.concat "" parser_codl
 
 
 
-let () = Insert_linenum.buffer := String.copy parser_code
+let () = Insert_linenum.buffer := Bytes.of_string parser_code
 let lexbuf = Lexing.from_string parser_code
 let parser_code = Insert_linenum.insert_linenum lexbuf
 
@@ -1689,7 +1689,7 @@ let () = if !Argument.no_mli then () else
     (List.fold_left aux "" non_terminal_start_list)^
     mli_code
   in
-  Insert_linenum.buffer := String.copy parser_code_mli;
+  Insert_linenum.buffer := Bytes.of_string parser_code_mli;
   let lexbuf = Lexing.from_string parser_code_mli in
   let parser_code_mli = Insert_linenum.insert_linenum lexbuf in
   let dest_file_mli = open_out output_file_mli in

@@ -593,13 +593,13 @@ let lex_engine is_main_lexer tbl_list (lexbuf:Lexing.lexbuf) reset_start_pos =
         lexbuf.lex_curr_pos <- p+1;
         if !dypgen_verbose>4 then
           (Printf.fprintf !log_channel
-          "lex_engine reads: `%c'\n" lexbuf.lex_buffer.[p]);
-        try Char.code lexbuf.lex_buffer.[p]
+          "lex_engine reads: `%c'\n" (Bytes.get lexbuf.lex_buffer p));
+        try Char.code (Bytes.get lexbuf.lex_buffer p)
         with Invalid_argument("index out of bounds")
         -> (Printf.printf "%d, %d, %s, %d, %d\n"
          lexbuf.lex_curr_pos lexbuf.lex_buffer_len
          (string_of_bool reset_start_pos)
-         p (String.length lexbuf.lex_buffer);
+         p (Bytes.length lexbuf.lex_buffer);
         raise (Invalid_argument("index out of bounds")))
     in
     let aux_lex (new_state_list,valid_lex) tbl state =
