@@ -1696,7 +1696,7 @@ let () = if !Argument.no_mli then () else
   output_string dest_file_mli parser_code_mli;
   close_out dest_file_mli;
   let lexbuf = Lexing.from_string parser_code in
-  (try Insert_linenum.replace_filename parser_code input_file_short lexbuf
+  (try Insert_linenum.replace_filename (Bytes.of_string parser_code) input_file_short lexbuf
   with Failure _ -> (error_regexp (input_file_short^".ml.temp"); exit 2));
   let dest_file = open_out output_file in
   output_string dest_file parser_code;
