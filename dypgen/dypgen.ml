@@ -26,7 +26,7 @@ let extract_type = input_file_short^".extract_type"
 let output_file_mli = input_file_short^".mli"
 
 
-let lexbuf = Lexing.from_channel (Pervasives.open_in input_file)
+let lexbuf = Lexing.from_channel (Stdlib.open_in input_file)
 let () =
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = input_file };
   lexbuf.lex_start_p <- { lexbuf.lex_start_p with pos_fname = input_file }
@@ -651,7 +651,7 @@ let inh_cons_map =
 module Ordered_str2 =
 struct
   type t = string * string
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
 end
 module Str2_map = Map.Make(Ordered_str2)
 
