@@ -1,4 +1,4 @@
-let dypgen_version = "20120619"
+let dypgen_version = "20191116"
 
 let verbose = ref 1
 let merge_warning = ref false
