@@ -1,3 +1,8 @@
+2019/11/16
+
+Fixed the project to work with OCaml versions >= 4.06.0.
+
+__________________________________________________________________________
 2012/06/19
 
 Fixed a bug that made the parser return wrong beginning positions for the
