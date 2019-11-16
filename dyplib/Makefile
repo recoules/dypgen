@@ -57,7 +57,7 @@ ifdef CAMLOPT
 .ml.cmx:
 	$(CAMLOPT) $(REP) -c $<
 .ml.p.cmx:
-	$(CAMLOPT) $(REP) -p -c -o $*.p.cmx $<
+	$(CAMLOPT) $(REP) -c -o $*.p.cmx $<
 endif
 
 clean:
