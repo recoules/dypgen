@@ -3,7 +3,7 @@ open TinyML_parser
 open Dyp
 
 let input_file_name = !(Argument.string_ref)
-let input_file = Pervasives.open_in input_file_name
+let input_file = Stdlib.open_in input_file_name
 
 let pp, se_code =
   let (pp:(unit,

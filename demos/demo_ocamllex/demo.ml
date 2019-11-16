@@ -12,7 +12,7 @@ let _ = if !string_ref = "" then
   exit 0)
 
 let input_file = !string_ref
-let lexbuf = Lexing.from_channel (Pervasives.open_in input_file)
+let lexbuf = Lexing.from_channel (Stdlib.open_in input_file)
 let prog = fst (List.hd (Parser.main Lexer.token lexbuf))
 
 let s = str_expr prog

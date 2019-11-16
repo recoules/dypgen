@@ -4,7 +4,7 @@ open Lexing
 let input_file = "input"
 
 let lexbuf = Dyp.from_channel
-  (Position_parser.pp ()) (Pervasives.open_in input_file)
+  (Position_parser.pp ()) (Stdlib.open_in input_file)
 
 let std_lb = Dyp.std_lexbuf lexbuf
 let _ = std_lb.lex_curr_p <-

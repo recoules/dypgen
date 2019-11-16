@@ -4,7 +4,7 @@ open TinyML_lexer
 
 let input_file = !(Argument.string_ref)
 
-let lexbuf = Ulexing.from_utf8_channel (Pervasives.open_in input_file)
+let lexbuf = Ulexing.from_utf8_channel (Stdlib.open_in input_file)
 
 let pf = TinyML_parser.main TinyML_lexer.token lexbuf
 let prog = fst (List.hd pf)
