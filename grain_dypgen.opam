@@ -10,11 +10,9 @@ depends: [
 ]
 patches: ["install-bsd-compatible.patch"]
 install: [
-  make
-  "install"
-  "DYPGENLIBDIR=%{lib}%"
-  "BINDIR=%{bin}%"
-  "MANDIR=%{man}%/man1"
+  [make "install" "DYPGENLIBDIR=%{lib}%" "BINDIR=%{bin}%" "MANDIR=%{man}%/man1"]
+  ["sh.exe" "-c" "if [ -f '%{bin}%/dypgen' ] && [ ! -f '%{bin}%/dypgen.exe' ] ; then mv '%{bin}%/dypgen' '%{bin}%/dypgen.exe' ; fi" ] { os = "win32" }
+  ["sh.exe" "-c" "if [ -f '%{bin}%/dypgen.opt' ] && [ ! -f '%{bin}%/dypgen.opt.exe' ] ; then mv '%{bin}%/dypgen.opt' '%{bin}%/dypgen.opt.exe' ; fi" ] { os = "win32" }
 ]
 synopsis: "Self-extensible parsers and lexers for OCaml"
 description: """
