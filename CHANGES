@@ -1,3 +1,8 @@
+## 0.2.1 (2025-05-02)
+
+Transition to dune build system.
+
+__________________________________________________________________________
 2019/11/16
 
 Fixed the project to work with OCaml versions >= 4.06.0.

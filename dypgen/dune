@@ -1,0 +1,13 @@
+(executable
+ (package dyp)
+ (public_name dypgen)
+ (modules_without_implementation parse_tree)
+ (libraries dyp)
+ (flags -w -9-32-33))
+
+(ocamllex dypgen_lexer)
+
+(ocamllex extract_type)
+
+(ocamllex insert_linenum)
+

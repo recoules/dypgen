@@ -1,0 +1,28 @@
+(install
+ (files dyp2gram.pl)
+ (section bin)
+ (package dyp))
+
+(rule
+ (alias parser)
+ (enabled_if false)
+ (targets dypgen_parser.mli dypgen_parser.ml)
+ (deps
+  (:exe dypgen/dypgen.exe)
+  (:src dypgen/dypgen_parser.dyp)
+  (:int dypgen/parse_tree.mli)
+  (source_tree dyplib))
+ (mode
+  (promote
+   (into dypgen)))
+ (action
+  (progn
+   (chdir
+    dypgen
+    (run %{ocamlc} -I %{project_root}/dyplib -c %{int}))
+   (copy %{src} dypgen_parser.dyp)
+   (run
+    %{exe}
+    --ocamlc
+    "-rectypes -I dypgen -I %{project_root}/dyplib"
+    dypgen_parser.dyp))))

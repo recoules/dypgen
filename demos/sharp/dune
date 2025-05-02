@@ -1,0 +1,19 @@
+(executable
+ (promote (until-clean))
+ (name sharp)
+ (libraries dyp)
+ (flags -w -27-32))
+
+(rule
+ (targets sharp_parser.mli sharp_parser.ml)
+ (deps
+  (:exe %{project_root}/dypgen/dypgen.exe)
+  (:src sharp_parser.dyp)
+  %{project_root}/dyplib/dyp.cmi)
+ (action
+  (run
+   %{exe}
+   --merge-warning
+   --ocamlc
+   "-rectypes -I %{project_root}/dyplib"
+   %{src})))

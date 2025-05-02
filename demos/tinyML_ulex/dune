@@ -1,0 +1,32 @@
+(executable
+ (enabled_if false)
+ (promote (until-clean))
+ (name tinyML)
+ (libraries ulex dyp)
+ (flags -w -27-32 -rectypes)
+ (preprocess
+  (per_module
+   ((action
+     (run %{bin:camlp4o} -I %{lib:ulex:.} pa_ulex.cma -- %{input-file}))
+    tinyML_lexer))))
+
+(rule
+ (target tinyML_parser.ml)
+ (deps
+  (:exe %{project_root}/dypgen/dypgen.exe)
+  (:src tinyML_parser.dyp)
+  (:int1 argument.ml)
+  (:int2 parse_tree.ml)
+  %{project_root}/dyplib/dyp.cmi)
+ (action
+  (progn
+   (run %{ocamlc} -I %{project_root}/dyplib -c %{int1})
+   (run %{ocamlc} -I %{project_root}/dyplib -c %{int2})
+   (run %{exe} --ocamlc "-rectypes -I %{project_root}/dyplib" %{src}))))
+
+(cram
+ (enabled_if false)
+ (deps
+  (:exe tinyML.exe)
+  (:input
+   (glob_files test*))))

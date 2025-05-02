@@ -1,0 +1,14 @@
+(executable
+ (promote (until-clean))
+ (name calc)
+ (libraries dyp)
+ (flags -w -27-32))
+
+(rule
+ (targets calc_parser.mli calc_parser.ml)
+ (deps
+  (:exe %{project_root}/dypgen/dypgen.exe)
+  (:src calc_parser.dyp)
+  %{project_root}/dyplib/dyp.cmi)
+ (action
+  (run %{exe} --pv-obj --ocamlc "-rectypes -I %{project_root}/dyplib" %{src})))

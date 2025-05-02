@@ -1,0 +1,30 @@
+(executable
+ (promote (until-clean))
+ (name tinyML)
+ (libraries dyp)
+ (flags -w -27-32 -rectypes))
+
+(rule
+ (target tinyML_parser.ml)
+ (deps
+  (:exe %{project_root}/dypgen/dypgen.exe)
+  (:src tinyML_parser.dyp)
+  (:int parse_tree.ml)
+  %{project_root}/dyplib/dyp.cmi)
+ (action
+  (progn
+   (run %{ocamlc} -I %{project_root}/dyplib -c %{int})
+   (run
+    %{exe}
+    --no-mli
+    --pv-obj
+    --merge-warning
+    --ocamlc
+    "-rectypes -I %{project_root}/dyplib"
+    %{src}))))
+
+(cram
+ (deps
+  (:exe tinyML.exe)
+  (:input
+   (glob_files test*))))

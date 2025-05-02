@@ -1,0 +1,8 @@
+(library
+ (public_name dyp)
+ (name dyp)
+ (flags -w -27-33-52))
+
+(rule
+ (action
+  (copy %{cmi:dyp} dyp.cmi)))
