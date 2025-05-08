@@ -4,20 +4,22 @@
 
 (generate_opam_files true)
 
-(name grain_dypgen)
+(name dypgen)
 
 (version "0.2.1")
 
-(maintainers "https://github.com/ocaml/opam-repository/issues")
+(maintainers "Frédéric Recoules")
 
 (authors "Emmanuel Onzo" "Philip Blair")
 
 (license "CeCILL-B")
 
-(homepage "https://github.com/grain-lang/dypgen")
+(homepage "http://dypgen.free.fr/")
 
 (source
- (github grain-lang/dypgen))
+ (github recoules/dypgen))
+
+(bug_reports "https://github.com/recoules/dypgen/issues")
 
 (package
  (name dypgen)

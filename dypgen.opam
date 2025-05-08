@@ -8,11 +8,11 @@ dypgen is a GLR parser generator for OCaml, it is able to
 generate self-extensible parsers (also called adaptive parsers) as
 well as extensible lexers for the parsers it produces.
 (fork of pre-4.06 dypgen: http://dypgen.free.fr/)"""
-maintainer: ["https://github.com/ocaml/opam-repository/issues"]
+maintainer: ["Frédéric Recoules"]
 authors: ["Emmanuel Onzo" "Philip Blair"]
 license: "CeCILL-B"
-homepage: "https://github.com/grain-lang/dypgen"
-bug-reports: "https://github.com/grain-lang/dypgen/issues"
+homepage: "http://dypgen.free.fr/"
+bug-reports: "https://github.com/recoules/dypgen/issues"
 depends: [
   "dune" {>= "2.7"}
   "ocaml" {>= "4.07"}
@@ -32,4 +32,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/grain-lang/dypgen.git"
+dev-repo: "git+https://github.com/recoules/dypgen.git"
