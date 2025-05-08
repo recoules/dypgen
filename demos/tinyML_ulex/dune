@@ -25,6 +25,7 @@
    (run %{exe} --ocamlc "-rectypes -I %{project_root}/dyplib" %{src}))))
 
 (cram
+ (package dypgen)
  (enabled_if false)
  (deps
   (:exe tinyML.exe)

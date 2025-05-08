@@ -24,6 +24,7 @@
 (ocamllex lexer)
 
 (cram
+ (package dypgen)
  (deps
   (:exe demo.exe)
   (:input

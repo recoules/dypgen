@@ -22,6 +22,7 @@
     %{src}))))
 
 (cram
+ (package dypgen)
  (deps
   (:exe position.exe)
   (:input input)))

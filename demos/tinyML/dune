@@ -24,6 +24,7 @@
     %{src}))))
 
 (cram
+ (package dypgen)
  (deps
   (:exe tinyML.exe)
   (:input
