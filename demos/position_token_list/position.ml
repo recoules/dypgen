@@ -1,5 +1,4 @@
 open Position_parser
-open Position_lexer
 open Parse_tree
 open Lexing
 

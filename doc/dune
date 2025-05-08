@@ -1,4 +1,4 @@
 (install
  (files dypgen.1 dyp2gram.1)
  (section man)
- (package dyp))
+ (package dypgen))

@@ -1,6 +1,3 @@
-open Calc_parser
-open Calc_lexer
-
 let () = Printf.printf "
 Simple calculator example
 

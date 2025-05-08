@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name merge_tp)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets merge_tp_parser.mli merge_tp_parser.ml)

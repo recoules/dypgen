@@ -1,6 +1,7 @@
 val dypgen_verbose : int ref
 (** by default = 0, gives infos about the parsing if set>0,
   breaks re-entrancy if set>2. *)
+    
 (*type token_name = int*)
 type 'a nt_prio =
   | No_priority

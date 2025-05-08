@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name tinyML)
  (libraries dyp)
- (flags -w -27-32 -rectypes))
+ (flags :standard -w -27-32 -rectypes))
 
 (rule
  (target tinyML_parser.ml)

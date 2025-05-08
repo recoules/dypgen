@@ -15,7 +15,7 @@ homepage: "https://github.com/grain-lang/dypgen"
 bug-reports: "https://github.com/grain-lang/dypgen/issues"
 depends: [
   "dune" {>= "2.7"}
-  "dyp"
+  "dypgen"
   "odoc" {with-doc}
 ]
 build: [

@@ -15,7 +15,7 @@ let interval_diff (a1,b1) (a2,b2) =
     else [max a1 (b2+1), b1]
 
 let diff cs1 cs2 =
-  let rec aux cs1 ci2 =
+  let aux cs1 ci2 =
     List.fold_left (fun l ci1 -> (interval_diff ci1 ci2)@l) [] cs1
   in
   List.fold_left aux cs1 cs2
@@ -282,7 +282,7 @@ let disjoint_tl tl scount =
   
   let res = aux1 0 [] in
   
-  List.iter (fun (il,n) ->
+  List.iter (fun (il,_) ->
     List.iter (fun (a,b) ->
       ci_begin.(a) <- [];
       ci_end.(b) <- []) il) tl;
@@ -423,7 +423,7 @@ let make_lexer build_nfa_table =
     ([],0,0) rl
   in
   let state_count_array = Array.make nfa_state_nb 0 in
-  let start, sl, snb =
+  let start, sl, _ =
     make_dfa state_count_array (fun n -> n.matched) nfa_list in
   
   if !dypgen_verbose>4 then print_node_list sl;
@@ -466,7 +466,7 @@ let extend_lexer main_lexer_start regexp_list build_nfa_table node_nb regexp_nb 
   let nfa_list, fst_regexp_id, nfa_state_nb =
     List.fold_left aux_nfa ([main_lexer_start],0,node_nb)
       (fst regexp_list) in
-  let nfa_list, curr_regexp_nb, nfa_state_nb =
+  let nfa_list, _, nfa_state_nb =
     List.fold_left aux_nfa
       (nfa_list,regexp_nb+fst_regexp_id,node_nb+nfa_state_nb)
       (snd regexp_list) in
@@ -478,7 +478,7 @@ let extend_lexer main_lexer_start regexp_list build_nfa_table node_nb regexp_nb 
       n.matched Int_set.empty
     else n.matched
   in
-  let start, sl, snb =
+  let start, sl, _ =
     make_dfa state_count_array filter_matched nfa_list in
   
   if !dypgen_verbose>4 then print_node_list sl;
@@ -595,7 +595,7 @@ let lex_engine is_main_lexer tbl_list (lexbuf:Lexing.lexbuf) reset_start_pos =
           (Printf.fprintf !log_channel
           "lex_engine reads: `%c'\n" (Bytes.get lexbuf.lex_buffer p));
         try Char.code (Bytes.get lexbuf.lex_buffer p)
-        with Invalid_argument("index out of bounds")
+        with Invalid_argument _
         -> (Printf.printf "%d, %d, %s, %d, %d\n"
          lexbuf.lex_curr_pos lexbuf.lex_buffer_len
          (string_of_bool reset_start_pos)

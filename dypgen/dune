@@ -1,9 +1,9 @@
 (executable
- (package dyp)
+ (package dypgen)
  (public_name dypgen)
  (modules_without_implementation parse_tree)
  (libraries dyp)
- (flags -w -9-32-33))
+ (flags :standard -w -27-32))
 
 (ocamllex dypgen_lexer)
 

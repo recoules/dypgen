@@ -3,11 +3,8 @@ let version = "20191116"
 let list_map f l = List.rev (List.rev_map f l)
 
 include Dyplex
-open Dyp_special_types
 
 open Printf
-
-let default_priority = 0
 
 type ('token,'obj,'data,'local_data,'lexbuf) dypgen_toolbox = {
   parser_pilot : ('token,'obj,'data,'local_data,'lexbuf) parser_pilot;
@@ -95,7 +92,6 @@ struct
 end
 
 module Urule_map = Map.Make(Ordered_urule)
-type ('t,'a,'b,'c,'d) user_grammar = (('t,'a,'b,'c,'d) action) list Urule_map.t
 
 module NTS = Set.Make(Ordered_non_ter)
 
@@ -189,7 +185,7 @@ struct
     a dyp av_list
 
   let keep_zero l = match l with
-    | (o,gd,ld)::_ -> [], gd, ld
+    | (_,gd,ld)::_ -> [], gd, ld
     | [] -> assert false
 
   let array_of_list =
@@ -220,7 +216,7 @@ open Tools
 
 let dummy_lhs = (0,0,0)
 
-let make_real_grammar user_g (*(pmap:priority_data)*) str_non_ter nt_table ppar =
+let make_real_grammar user_g (*(pmap:priority_data)*) str_non_ter nt_table _ =
   if !dypgen_verbose>1 then
     (let nbr = Urule_map.fold (fun _ _ n -> n+1) user_g 0 in
     Printf.fprintf !log_channel "size of the grammar : %d rules\n" nbr);
@@ -329,7 +325,7 @@ let make_real_grammar user_g (*(pmap:priority_data)*) str_non_ter nt_table ppar 
   in
   
   Urule_map.iter
-    (fun (ind, litl, p, b) a ->
+    (fun (ind, litl, _, b) a ->
       (*let ind = Prio_map.find p array_nt_prio.(ntn) in*)
       g.(ind) <- Map_rhs.add ((array_of_list litl), b) a g.(ind))
     user_g;
@@ -499,7 +495,7 @@ let make_po_array gram_rhs lhs_table (*lhslists priodata array_nt_prio*) sub_g n
         | _ -> assert false)
       gram_rhs.(rn)
     in
-    let g i (ind', is_nullable) =
+    let g i (ind', _) =
       if array_for_all (fun j x -> i=j || snd x) rhs then
         (*List.iter (fun (_, _, ind') ->*)
           if not (Hashtbl.mem po_ht (ind, ind')) then
@@ -525,31 +521,6 @@ let make_po_array gram_rhs lhs_table (*lhslists priodata array_nt_prio*) sub_g n
               && (Hashtbl.mem po_ht (ind', ind))
             then j::res else res)
       [] check_cyclic_rule.(i)
-  done
-
-
-
-let print_r_L r_L =
-  let f j = print_int j; print_string " " in
-  for i=0 to (Array.length r_L)-1 do
-    (print_int i; print_string " -L-> ";
-    List.iter f r_L.(i); print_newline ())
-  done
-
-
-let print_rel_L rel_L width n =
-  let str_bin bin =
-    let rec aux c i =
-      if i=31 then c else
-      aux (c^(string_of_int ((bin lsr i) mod 2))) (i+1)
-    in
-    aux "" 0
-  in
-  for i=0 to width-1 do
-    (for j=0 to n-1 do
-      Printf.printf "%s\n" (str_bin rel_L.(i).(j))
-    done;
-    print_newline ())
   done
 
 let htc ht i1 i2 = Hashtbl.mem ht (i1, i2)
@@ -612,26 +583,6 @@ let print_grammar chan gram_rhs lhs_table str_non_ter str_ter regexp_array =
   done;
   print_newline ()
 
-
-let print_gram_lhs chan gram_lhs str_non_ter =
-  let f i rn =
-    Printf.fprintf chan "lhs:%s  rn:%d\n"
-    (str_lhs (i,0,i) str_non_ter) rn
-  in
-  for i=0 to (Array.length gram_lhs)-2 do (
-    (match snd gram_lhs.(i) with
-    | None ->
-        Printf.fprintf chan "no epsilon rule for %s\n"
-          (str_lhs (i,0,i) str_non_ter)
-    | Some rn ->
-        Printf.fprintf chan "some epsilon rule nb %d for %s\n" rn
-          (str_lhs (i,0,i) str_non_ter)
-    );
-    List.iter (f i) (fst gram_lhs.(i)) )
-  done
-
-
-
 let remove_implicit gram_lhs implicit =
   Array.init (Array.length gram_lhs)
   (fun i ->
@@ -640,7 +591,7 @@ let remove_implicit gram_lhs implicit =
 
 
 
-let create_aut gram_rhs gram_lhs gram_parnt bnt_array r_L (*prio_dat*) it_nb (*array_nt_prio nt_of_ind prio_of_ind*) ist_nt_nb (*lhslists*) lhs_table str_non_ter entry_points_list ppar token_nb str_ter regexp_array implicit_rule =
+let create_aut gram_rhs gram_lhs gram_parnt bnt_array r_L (*prio_dat*) it_nb (*array_nt_prio nt_of_ind prio_of_ind*) ist_nt_nb (*lhslists*) lhs_table str_non_ter entry_points_list _ token_nb str_ter regexp_array implicit_rule =
   let () = countst := 0 in
   let is_trace =
     ((Array.make token_nb Map_is.empty),
@@ -743,17 +694,7 @@ let print_table_state chan i table table_it table_lit_trans gram_rhs lhs_table s
     (fun i -> str_non_ter.(i));
   print_newline (); print_newline ()
 
-let print_tables table table_it table_lit_trans gram_rhs lhs_table str_ter str_non_ter ppar regexp_array =
-  Printf.printf "\nTables\n\n";
-  for i=0 to (Array.length table)-1 do
-    print_table_state !log_channel i table table_it table_lit_trans gram_rhs
-      lhs_table str_non_ter str_ter
-      regexp_array
-  done
-
-
-
-let make_table state_list n nt_nb gram_rhs lhs_table ppar token_nb str_ter str_non_ter regexp_array =
+let make_table state_list n _ gram_rhs _ _ token_nb _ _ _ =
   let table = Array.init n
     (fun _ -> [|
       Hashtbl.create (token_nb/10);
@@ -807,21 +748,6 @@ let make_table state_list n nt_nb gram_rhs lhs_table ppar token_nb str_ter str_n
   str_ter str_non_ter nt_of_ind priority_names ppar regexp_array;*)
   
   table, table_it, table_lit_trans, state_bnt, state_is_mergeable
-
-
-
-let print_g g str_non_ter str_ter regexp_array =
-  let f i (rhs, _) _ =
-    Printf.printf "%s -> %s\n"
-      (str_lhs (i,0,i) str_non_ter)
-      (str_handle rhs 0 str_non_ter str_ter regexp_array)
-  in
-  for i=0 to (Array.length g)-1 do
-    Map_rhs.iter (f i) g.(i)
-  done
-
-
-
 
 let update_user_g ral user_g =
   let f (user_g, i) (r, a, inh_l, ier, ilr) =
@@ -937,29 +863,6 @@ struct
 end
 module Rule_map = Map.Make(Ordered_rule)
 
-
-
-type extra_station = {
-  es_number : int;
-  es_component : int }
-
-type old_station = No_station | Some_station of state | Extra_station of extra_station
-
-
-
-let print_stations stations gram_rhs lhs_table str_non_ter str_ter regexp_array =
-  Printf.fprintf !log_channel "\nstations: (%d)\n" (Array.length stations -1);
-  for i=0 to Array.length stations -1 do
-    Printf.fprintf !log_channel "\nstation: (%s,%d)\n"
-      str_non_ter.(i) i;
-    match stations.(i) with None -> assert false | Some s ->
-    print_state s gram_rhs lhs_table
-      str_non_ter str_ter regexp_array
-  done;
-  flush_all ()
-
-
-
 let lit_of_nlit str_non_ter (*prio_names*) str_ter (regexp_array:regexp array) symb =
   match symb with
   | Ps_Ter t ->
@@ -968,13 +871,13 @@ let lit_of_nlit str_non_ter (*prio_names*) str_ter (regexp_array:regexp array) s
         ((*Printf.printf "t=%d, t-(Array.length str_ter)=%d, regexp_array=%d\n"
         t (t-(Array.length str_ter)) (Array.length regexp_array);*)
         Regexp (regexp_array.(t-(Array.length str_ter))) ) )
-  | Ps_Non_ter (nt,p) ->
+  | Ps_Non_ter (nt,_) ->
       (*Non_ter (str_non_ter.(nt),nt_prio p prio_names)*)
       Non_ter (str_non_ter.(nt), No_priority)
   | Ps_Ter_NL t ->
       (try Ter_NL (str_ter.(t))
       with _ -> Regexp_NL (regexp_array.(t-(Array.length str_ter))))
-  | Ps_Non_ter_NL (nt,p) ->
+  | Ps_Non_ter_NL (nt,_) ->
       Non_ter_NL (str_non_ter.(nt), No_priority)
       (*Non_ter_NL (str_non_ter.(nt),nt_prio p prio_names)*)
 
@@ -987,7 +890,7 @@ str_non_ter (*prio_names*) str_ter (regexp_array:regexp array) =
   let n = Array.length gram_rhs in
   let rn_of_rule = Hashtbl.create n in
   for i=0 to n-1 do
-    let nt,p,_ = lhs_table.(i) in
+    let nt,_,_ = lhs_table.(i) in
     let litl = List.map
       (lit_of_nlit str_non_ter (*prio_names*) str_ter regexp_array)
       (list_of_array gram_rhs.(i)) in
@@ -1096,29 +999,6 @@ let add_prio_nt nt_prio_map lhs_prio_map priodata nt_table ntntp_ht ntp_ntl_ht =
     Hashtbl.add ntp_ntl_ht lhs nt_list;
     ral)
   nt_prio_map []
-
-
-
-let print_nt_ntl_array outchan nt_ntl_array str_non_ter =
-  output_string outchan "nt_ntl_array:\n";
-  for i=0 to Array.length nt_ntl_array -1 do
-    output_string outchan (str_non_ter.(i)^" : ");
-    output_string outchan
-      (String.concat " "
-      (Int_set.fold (fun nt l -> str_non_ter.(nt)::l) nt_ntl_array.(i) []));
-    output_string outchan "\n"
-  done
-
-
-let print_nt_cons_map nt_cons_map =
-  output_string !log_channel "nt_cons_map:\n";
-  String_map.iter
-    (fun nt cons ->
-      Printf.fprintf !log_channel "nt:%s - cons:%d\n" nt cons)
-    nt_cons_map;
-  output_string !log_channel "\n"
-
-
 
 let make_grammar ral old_ral (relations:string list list) ppar ter_table str_ter regexp_table nt_cons_map =
   
@@ -1447,7 +1327,7 @@ let make_grammar ral old_ral (relations:string list list) ppar ter_table str_ter
 let create_parsing_device ra_list relations (*global_data local_data*) nt_cons_map entry_point_list ppar regexp_decl_list main_lexer aux_lexer token_nb str_ter ter_table =
   
   let gram_lhs, gram_rhs, lhs_table, actions, inherited, nt_nb,
-    po_ht, user_g, nt_table, str_non_ter, str_non_ter_prio, rn_of_rule,
+    po_ht, _, nt_table, str_non_ter, str_non_ter_prio, rn_of_rule,
     regexp_table, regexp_list, regexp_actions, regexp_array,
     rule_options, cyclic_rules, gram_parnt, bnt_array, cons_of_nt,
     nt_ntl_array, implicit_rule, left_rec_rule
@@ -1688,354 +1568,12 @@ let make_parser
   pp_gd = global_data;
   pp_ld = local_data }
 
-
-
-let remove_from_user_g rl user_g =
-  let f user_g r = Urule_map.remove r user_g in
-  List.fold_left f user_g rl
-
-let build_nt_to_add gram_rhs r_L item_list (*lhslists prio_dat array_nt_prio*) =
-  let nta nt_to_add (rn,dp) = match gram_rhs.(rn).(dp) with
-    | Ps_Non_ter nt | Ps_Non_ter_NL nt ->
-        (*let lhs_l =
-          comp_lhslist nt lhslists prio_dat array_nt_prio
-        in*)
-        let g1 nt_to_add ind =
-          Int_set.add ind nt_to_add
-        in
-        let g2 nt_to_add (j,_) =
-          let ind_list = r_L.(j) in
-          List.fold_left g1 nt_to_add ind_list
-        in
-        g2 nt_to_add nt
-    | _ -> assert false
-  in
-  List.fold_left nta Int_set.empty item_list
-
-
-let str_user_rhs rhs str_ter =
-  let rec aux s rhs = match rhs with
-    | [] -> s
-    | (Ps_Non_ter (nt,_))::tl -> aux (s^" "^(string_of_int nt)) tl
-    | (Ps_Non_ter_NL (nt,_))::tl -> aux (s^" - "^(string_of_int nt)) tl
-    | (Ps_Ter t)::tl -> aux
-      (s^" "^(try str_ter.(t) with _ -> (Printf.sprintf "<regexp:%d>" t))) tl
-    | (Ps_Ter_NL t)::tl -> aux
-      (s^" "^(try str_ter.(t) with _ -> (Printf.sprintf "- <regexp:%d>" t))) tl
-  in
-  aux "" rhs
-
-let str_user_rule (lhs,rhs,_) str_ter =
-  (string_of_int lhs)^" -> "^(str_user_rhs rhs str_ter)
-
-let print_ral ral str_ter =
-  let f (r,a) = print_endline (str_user_rule r str_ter) in
-  List.iter f ral
-
-
-
-
-let mark source old_stations component predict lhs_nb is_station count_es lhs_station source_to_clear q1 =
-  (*print_state q1 gram_rhs lhs_table nt_of_ind prio_of_ind str_non_ter
-  str_token_name priority_names;*)
-  (*Printf.fprintf !log_channel "is_station:%s\n" (string_of_bool is_station);
-  Printf.fprintf !log_channel "q1.number:%d\n" q1.number;
-  Printf.fprintf !log_channel "component.(q1.number):%d\n" component.(q1.number);
-  Printf.fprintf !log_channel "lhs_nb:%d\n" lhs_nb;*)
-  let f1 q lhs_ind stc =
-    (*Printf.fprintf !log_channel "lhs_ind:%d\n" lhs_ind;*)
-    match old_stations.(component.(q1.number)*lhs_nb+lhs_ind) with
-    | Some_station r -> source.(r.number) <- q.number; r.number::stc
-    | Extra_station r -> source.(r.es_number) <- q.number; r.es_number::stc
-    | No_station ->
-        (*Printf.fprintf !log_channel "extra_station 1 pour state=%d, lhs_ind=%d\n"
-          q.number lhs_ind;*)
-        let r = {
-          es_number = !count_es;
-          es_component = component.(q1.number) }
-        in
-        incr count_es;
-        old_stations.(component.(q1.number)*lhs_nb+lhs_ind) <- Extra_station r;
-        Hashtbl.add lhs_station r.es_number lhs_ind;
-        source.(r.es_number) <- q.number; r.es_number::stc
-  in
-  if is_station then
-    (source.(q1.number) <- q1.number;
-    Int_set.fold (f1 q1) predict.(q1.number) (q1.number::source_to_clear))
-  else
-    let f2 lhs_ind stc =
-      match old_stations.(component.(q1.number)*lhs_nb+lhs_ind) with
-      | Some_station q2 ->
-          source.(q2.number) <- q2.number;
-          Int_set.fold (f1 q2) predict.(q2.number) (q2.number::stc)
-      | Extra_station es ->
-          source.(es.es_number) <- es.es_number; es.es_number::stc
-      | No_station ->
-          (*Printf.fprintf !log_channel "extra_station 2\n";*)
-          let r = {
-            es_number = !count_es;
-            es_component = component.(q1.number) }
-          in
-          incr count_es;
-          Hashtbl.add lhs_station r.es_number lhs_ind;
-          old_stations.(component.(q1.number)*lhs_nb+lhs_ind) <- Extra_station r;
-          source.(r.es_number) <- r.es_number; r.es_number::stc
-    in
-    Int_set.fold f2 predict.(q1.number) source_to_clear
-
-
-
-
-
-
-
-let rec visit v src color_black source result old_stations component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list =
-  
-  let comp = component.(v.number) in
-  (*Printf.fprintf !log_channel "visit, comp=%d, v.number=%d\n" comp v.number;*)
-  let cb_tc =
-    if color_black.(v.number) then cb_tc
-    else (color_black.(v.number) <- true; v.number::cb_tc)
-  in
-  
-  let f1 lhs (cb_tc, state_list) =
-    match old_stations.(comp*lhs_nb+lhs) with
-    | Some_station w ->
-    (*Printf.fprintf !log_channel "visit f1 Some_station\n";*)
-    if (source.(w.number) = src || source.(w.number) = -1)
-        && color_black.(w.number) = false then
-      visit w src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-    else (cb_tc, state_list)
-    | No_station ->
-    (*Printf.fprintf !log_channel "visit f1 No_station\n";*)
-    let es = {
-      es_number = !count_es;
-      es_component = comp }
-    in
-    incr count_es;
-    Hashtbl.add lhs_station es.es_number lhs;
-    old_stations.(comp*lhs_nb+lhs) <- Extra_station es;
-      visit_es es src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-    | Extra_station es ->
-    (*Printf.fprintf !log_channel "visit f1 Extra_station\n";*)
-    if (source.(es.es_number) = src || source.(es.es_number) = -1)
-        && color_black.(es.es_number) = false then
-      visit_es es src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-    else (cb_tc, state_list)
-  in
-  let cb_tc, state_list =
-    Int_set.fold f1 predict.(v.number) (cb_tc, state_list)
-  in
-  let lhs =
-    try Hashtbl.find lhs_station v.number
-    with Not_found -> assert false
-  in
-  let rec f2 i cb_tc state_list =
-    if i=comp_nb then (cb_tc, state_list) else
-    if i=comp then f2 (i+1) cb_tc state_list else
-    match old_stations.(i*lhs_nb+lhs) with
-    | No_station ->
-        (*Printf.fprintf !log_channel "visit f2 No_station\n";*)
-        f2 (i+1) cb_tc state_list
-    | Some_station w ->
-    (*Printf.fprintf !log_channel "visit f2 Some_station\n";*)
-    if source.(w.number) = -1
-        && color_black.(w.number) = false then
-      let cb_tc, state_list =
-        visit w src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-      in
-      let state_list =
-        if result.(w.number) then state_list
-        else (result.(w.number) <- true; w::state_list)
-      in
-      f2 (i+1) cb_tc state_list
-    else f2 (i+1) cb_tc state_list
-    | Extra_station es ->
-    (*Printf.fprintf !log_channel "visit f2 Extra_station\n";*)
-    if source.(es.es_number) = -1
-        && color_black.(es.es_number) = false then
-      let cb_tc, state_list =
-        visit_es es src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-      in
-      f2 (i+1) cb_tc state_list
-    else f2 (i+1) cb_tc state_list
-  in
-  f2 0 cb_tc state_list
-
-
-
-and visit_es es src color_black source result old_stations component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list =
-  let cb_tc =
-    if color_black.(es.es_number) then cb_tc
-    else (color_black.(es.es_number) <- true; es.es_number::cb_tc)
-  in
-(*Printf.fprintf !log_channel "visit_es, comp=%d, es.es_number=%d\n"
-    es.es_component es.es_number;*)
-  let lhs =
-    try Hashtbl.find lhs_station es.es_number
-    with Not_found -> assert false
-  in
-  let rec f2 i cb_tc state_list =
-    if i=comp_nb then (cb_tc, state_list) else
-    if i=es.es_component then f2 (i+1) cb_tc state_list else
-    match old_stations.(i*lhs_nb+lhs) with
-    | No_station ->
-        (*Printf.fprintf !log_channel "visit No_station\n";*)
-        f2 (i+1) cb_tc state_list
-    | Some_station w ->
-    (*Printf.fprintf !log_channel "visit Some_station\n";*)
-    if source.(w.number) = -1
-        && color_black.(w.number) = false then
-      let cb_tc, state_list =
-        visit w src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-      in
-      let state_list =
-        if result.(w.number) then state_list
-        else (result.(w.number) <- true; w::state_list)
-      in
-      f2 (i+1) cb_tc state_list
-    else f2 (i+1) cb_tc state_list
-    | Extra_station es1 ->
-    (*Printf.fprintf !log_channel "visit Extra_station\n";*)
-    if source.(es1.es_number) = -1
-        && color_black.(es1.es_number) = false then
-      let cb_tc, state_list =
-        visit_es es1 src color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-      in
-      f2 (i+1) cb_tc state_list
-    else f2 (i+1) cb_tc state_list
-  in
-  f2 0 cb_tc state_list
-
-
-
-
-let epsilon_closure state_list old_stations component predict lhs_nb comp_nb is_station lhs_station count_es source color_black result =
-  let source_to_clear =
-    List.fold_left
-    (mark source old_stations component predict lhs_nb is_station count_es lhs_station)
-    [] state_list
-  in
-  
-  List.iter (fun s -> result.(s.number) <- true) state_list;
-  
-  let maybe_visit (cb_tc, state_list) q =
-    if source.(q.number) = q.number
-        && color_black.(q.number)  = false then
-      visit q q.number color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-    else
-      (cb_tc, state_list)
-  in
-  
-  let maybe_visit_es (cb_tc, state_list) es =
-    let b =
-      source.(es.es_number) = es.es_number
-        && color_black.(es.es_number) = false
-    in
-    if b then
-      visit_es es es.es_number color_black source result old_stations
-        component predict lhs_nb comp_nb lhs_station count_es cb_tc state_list
-    else
-      (cb_tc, state_list)
-  in
-  
-  let maybe_visit_bis (cb_tc, state_list) q =
-    let comp = component.(q.number) in
-    (*Printf.fprintf !log_stack_channel "predict card = %d\n"
-      (Int_set.cardinal predict.(q.number));*)
-    Int_set.fold
-    (fun lhs (cb_tc, state_list) ->
-      match old_stations.(comp*lhs_nb+lhs) with
-      | Some_station s ->
-          maybe_visit (cb_tc, state_list) s
-      | Extra_station es ->
-          maybe_visit_es (cb_tc, state_list) es
-      | No_station -> assert false)
-    predict.(q.number) (cb_tc, state_list)
-  in
-  
-  let color_black_to_clear, state_list =
-    if is_station then
-      List.fold_left maybe_visit ([],state_list) state_list
-    else
-      List.fold_left maybe_visit_bis ([],state_list) state_list
-  in
-  state_list, source_to_clear, color_black_to_clear
-
-
-
-
-let merge_states state_list li succ_states_array (*prd_nb*) non_kernel_array =
-  let state = {
-    number = !countst;
-    li = li;
-    items = new_item_set ();
-    mergeable = not (list_exists (fun s -> not s.mergeable) state_list);
-    bestowing_nt =
-      List.fold_left (fun bnt s -> match s.bestowing_nt with
-        | None -> bnt | (Some n) as x -> x) None state_list;
-      (*List.fold_left
-      (fun bnt s -> Int_set.union bnt s.bestowing_nt) Int_set.empty state_list;*)
-    succ_states = [] }
-  in
-  incr countst;
-  let sl = List.fold_left
-    (fun sl s ->
-     (*Printf.fprintf !log_stack_channel "red card=%d\n" (Int_set.cardinal s.items.reducible);
-     Printf.fprintf !log_stack_channel "red card=%d\n" (Int_set.cardinal s.items.reducible);*)
-      state.items.reducible <-
-        Int_set.union state.items.reducible s.items.reducible;
-      state.items.non_kernel <-
-        merge_non_kernel state.items.non_kernel s.items.non_kernel
-        non_kernel_array;
-      state.items.predict <- Predict.union state.items.predict s.items.predict;
-      List.fold_left (fun sl (v, _) ->
-        if !succ_states_array.(v.number) then sl
-        else (!succ_states_array.(v.number) <- true; (v, 0)::sl))
-        sl s.succ_states)
-    [] state_list
-  in
-  state.succ_states <- sl;
-  List.iter (fun (s, _) -> !succ_states_array.(s.number) <- false) sl;
-  state
-
-
-
 module Ordered_edge =
 struct
   type t = lit_trans * priority
   let compare = Stdlib.compare
 end
 module Edge_map = Map.Make(Ordered_edge)
-
-
-
-let make_key state_list gram_rhs =
-  let is = new_item_set () in
-  List.iter
-    (fun s ->
-      is.reducible <- Int_set.union is.reducible
-        (Int_set.filter
-        (fun rn -> Array.length gram_rhs.(rn)>0)
-        s.items.reducible);
-      is.kernel_t <- Intc_set.union is.kernel_t s.items.kernel_t;
-      is.kernel_nt <- Intc_set.union is.kernel_nt s.items.kernel_nt)
-    state_list;
-  is,
-  (Int_set.cardinal is.reducible) +
-  (Intc_set.cardinal is.kernel_t) +
-  (Intc_set.cardinal is.kernel_nt)
-
-
-
 
 let compute_nt_to_add is gram_rhs r_L (*array_nt_prio lhslists prio_dat*) non_kernel_array =
   let aux (rn,dp) (nt_to_add,nk) =
@@ -2323,59 +1861,6 @@ let compute_nt_to_add is gram_rhs r_L (*array_nt_prio lhslists prio_dat*) non_ke
   let _ = List.fold_left f 0 pdev_list in
   ()*)
 
-
-let rec diff_list l1 l2 res = match l1,l2 with
-  | _, [] -> res@l1
-  | [], _ -> res
-  | h1::t1, h2::t2 when h1=h2 -> diff_list t1 t2 res
-  | h1::t1, h2::t2 ->
-      if compare h1 h2 = 1 then diff_list l1 t2 res
-      else diff_list t1 l2 res
-
-
-exception No_prio
-
-let pick_prio ntp = match ntp with
-  | No_priority -> raise No_prio
-  | Eq_priority p
-  | Less_priority p
-  | Lesseq_priority p
-  | Greater_priority p
-  | Greatereq_priority p -> p
-
-
-
-let change_prio ntp p = match ntp with
-  | No_priority -> raise No_prio
-  | Eq_priority _ -> Eq_priority p
-  | Less_priority _ -> Less_priority p
-  | Lesseq_priority _ -> Lesseq_priority p
-  | Greater_priority _ -> Greater_priority p
-  | Greatereq_priority _ -> Greatereq_priority p
-
-
-exception External_prio
-
-let make_old_nt nt ntp pdev priodata str_non_ter =
-  let old_nt =
-    try Hashtbl.find pdev.nt_table str_non_ter.(nt)
-    with Not_found -> assert false
-  in
-  (*let old_ntp =
-    try
-      let p = pick_prio ntp in
-      let old_p = Hashtbl.find pdev.prio.prd_ind priodata.prd_names.(p) in
-      change_prio ntp old_p
-    with No_prio -> ntp
-      | Not_found -> raise External_prio
-      (* This can happen because stations include items imported from
-       other parse table components. *)
-  in
-  old_nt,old_ntp*)
-  old_nt, No_priority
-
-
-
 (* to be improved: memoize the resulting list for a couple (nt,ntp) too,
 instead of just the result for ntp. *)
 (*let diff_lhslist nt_of_ind prio_of_ind str_non_ter (nt,ntp) ntp_map pdev lhslists priodata array_nt_prio ind_subst =
@@ -2416,7 +1901,7 @@ instead of just the result for ntp. *)
 
 
 
-let new_start_state is key_is lit_trans nt_nb is_trace state_list gram_rhs gram_lhs gram_parnt bnt_array r_L non_kernel_array map_succ =
+let new_start_state is key_is lit_trans _ is_trace state_list gram_rhs gram_lhs gram_parnt _ r_L non_kernel_array map_succ =
   
   let key = key_is,
     (Int_set.cardinal key_is.reducible) +
@@ -2478,7 +1963,7 @@ let rule_of_nrule (gram_rhs:rhs array) rule_options lhs_table str_non_ter str_te
       regexp_array gram_rhs.(rn).(i))::l)
   in
   let litl = f (len-1) [] in
-  let nt,p,_ = lhs_table.(rn) in
+  let nt,_,_ = lhs_table.(rn) in
   let rol = match rule_options.(rn) with
     | 3 -> []
     | 2 -> nl_inside
@@ -2725,16 +2210,16 @@ let update_parsing_device ppar pdev_leftSib new_relations rapf_add new_nt_cons c
   
   let interm_pdev, state_ind =
     let ra_list,
-      entry_point_list, regexp_decl, main_lexer, aux_lexer,
+      entry_point_list, _, _, _,
       str_ter, ter_table, pdev
       = pdev_leftSib.ra_list@rapf_add,
       [], [], ([],[||]), [],
       pdev_leftSib.str_ter, pdev_leftSib.ter_table, pdev_leftSib
     in
     let gram_lhs, gram_rhs, lhs_table, actions, inherited, nt_nb,
-      po_ht, user_g,
+      po_ht, _,
       nt_table, str_non_ter, str_non_ter_prio, rn_of_rule,
-      regexp_table, regexp_list, regexp_actions, regexp_array,
+      _, regexp_list, regexp_actions, regexp_array,
       rule_options, cyclic_rules, gram_parnt, bnt_array,
       cons_of_nt, nt_ntl_array, implicit_rule, left_rec_rule
       = make_grammar ra_list [] relations ppar ter_table
@@ -3072,7 +2557,7 @@ and ('token,'obj,'data,'local_data,'lexbuf) edge = {
   in
   List.iter (aux (fun _ -> ())) topmost*)
 
-let create_e v1 label id v2 f topmost pt e_lexer_pos =
+let create_e v1 label id v2 _ _ pt e_lexer_pos =
   let new_edge = {
     edge_label = label; edge_id = id; dest = v2;
     parse_tree = pt;
@@ -3106,60 +2591,6 @@ let create_v state_nb pdev global_data local_data sn_nb last_token lexer_pos lay
   det_depth = depth;
   ref_count = 0;
   visited_states = vs }
-
-let count_nodes topmost =
-  let rec aux n idset sn =
-    if Int_set.mem sn.sn_nb idset then (n,idset) else
-    let idset = Int_set.add sn.sn_nb idset in
-    List.fold_left (fun (n,idset) e -> aux n idset e.dest)
-      (n+1,idset) sn.succ_edges
-  in
-  let n, _ =
-    List.fold_left (fun (n,idset) sn -> aux n idset sn)
-    (0,Int_set.empty) topmost
-  in
-  n
-
-
-
-type ('t,'a,'b,'c,'d) path =
-  ('t,'a,'b,'c,'d) vertex * (('t,'a,'b,'c,'d) edge list) * int
-(** vertex is for the start of the path, int is the token number, i.e.
-the first token in the part of the input which would be reduced if a reduction
-along this path of the graph-structured stack happens. *)
-
-type ('t,'o,'gd,'ld,'lb) reduction =
-  ('t,'o,'gd,'ld,'lb) path * (int * rhs) * int
-  (* The last int is the rule id.
-  The couple (int * rhs) is not necessary and should be dropped. *)
-
-type ('t,'o,'gd,'ld,'lb) merge_item =
-  ('t,'o,'gd,'ld,'lb) vertex * ('t,'o,'gd,'ld,'lb) edge * int *
-  ('o * 'gd * 'ld) list
-
-type ('t,'o,'gd,'ld,'lb) edge_obj =
-  ('t,'o,'gd,'ld,'lb) edge * 'o list
-
-type 'a last_red = No_red | Reg_red of 'a | Rec_red of 'a
-(* c'est quoi ??? inutile surement *)
-type ('t,'o,'gd,'ld,'lb) reduction_data = {
-  mutable red : ('t,'o,'gd,'ld,'lb) reduction list;
-  mutable recred : ('t,'o,'gd,'ld,'lb) reduction list;
-  mutable recred_eps : ('t,'o,'gd,'ld,'lb) reduction list;
-  mutable next_recred : ('t,'o,'gd,'ld,'lb) reduction list;
-  mutable next_recred_eps : ('t,'o,'gd,'ld,'lb) reduction list;
-  mutable merge_map : ('t,'o,'gd,'ld,'lb) merge_item Int_map.t;
-  mutable merge_map_eps : ('t,'o,'gd,'ld,'lb) merge_item Int_map.t;
-  mutable obj_recred : ('t,'o,'gd,'ld,'lb) edge_obj Int_map.t;
-  mutable obj_recred_eps : ('t,'o,'gd,'ld,'lb) edge_obj Int_map.t;
-  mutable old_obj_recred : ('t,'o,'gd,'ld,'lb) edge_obj Int_map.t;
-  mutable old_obj_recred_eps : ('t,'o,'gd,'ld,'lb) edge_obj Int_map.t;
-  mutable last_red : ('t,'o,'gd,'ld,'lb) reduction last_red;
-  mutable last_red_eps : ('t,'o,'gd,'ld,'lb) reduction last_red;
-  mutable parse_result : ('o * string) list; }
-
-
-
 
 (** [find_paths] returns a list of couples ([path],[token_nb]),
 where a path is a list of edges of the graph structured stack
@@ -3240,7 +2671,7 @@ let rec revcat a b = match a with
     The need for this partial order is explained in Scott McPeak's report.
     A better data structure than a list should be used, maybe a
     mutable list. *)
-let insert_partially_ordered l (((start0,p0,tnb0),(ind0,rhs0),rn0) as pr0) =
+let insert_partially_ordered l (((start0,p0,tnb0),(ind0,_),rn0) as pr0) =
   if !dypgen_verbose>2 then
     (output_string !log_channel "inserting reduction along:\n";
     print_path start0 p0);
@@ -3250,7 +2681,7 @@ let insert_partially_ordered l (((start0,p0,tnb0),(ind0,rhs0),rn0) as pr0) =
    been seen in the list *)
   let rec aux result b l = match l with
     | [] -> revcat result [pr0]
-    | (((start1,p1,tnb1),(ind1,rhs1),rn1) as pr1)::tl ->
+    | (((start1,p1,tnb1),(ind1,_),rn1) as pr1)::tl ->
         if tnb1<tnb0 then revcat result (pr0::l)
           (* yes, this is the good order *)
         else if tnb1>tnb0 then aux (pr1::result) false tl
@@ -3421,7 +2852,7 @@ let find_all_prev_nodes sn =
 
 
 
-let insert_reduction rl sn link counters topmost use_rule_order =
+let insert_reduction rl sn link counters _ use_rule_order =
   match sn.prev_nodes_eps with
   | [] -> insert_reduction_with_link rl sn link
       counters use_rule_order
@@ -3530,7 +2961,7 @@ let find_rightSib g_nb_rightSib st_nb snl (gd:'gd) (ld:'ld) layout_flags (gd_equ
 let print_sn sn =
   let chan = !log_stack_channel in
   let { state_nb = v; pdev = parsing_device; sn_nb = snnb;
-    last_token = last_token } = sn
+    last_token = last_token; _ } = sn
   in
   (*let nt_of_ind = parsing_device.nt_of_ind in
   let prio_of_ind = parsing_device.prio_of_ind in*)
@@ -3547,7 +2978,7 @@ let print_sn sn =
   output_string chan "\n";
   let f3 f4 ed =
     let ednb = ed.edge_id in
-    let { state_nb = v; sn_nb = snnb} = f4 ed in
+    let { state_nb = v; sn_nb = snnb; _} = f4 ed in
     Printf.fprintf chan "  sn:%d ed:%d st:%d\n" snnb ednb v
   in
   output_string chan "\n";
@@ -3567,19 +2998,6 @@ let check_last_token last_token vl =
 open Lexing
 
 exception Find_link_failed
-
-
-
-let compare_pr ((start0,p0,tnb0),(ind0,rhs0),rn0) ((start1,p1,tnb1),(ind1,rhs1),rn1) =
-  if tnb1<tnb0 then -1
-  else if tnb1>tnb0 then 1 else
-  let pdev0 = start0.pdev in
-  if pdev0.g_nb <> start1.pdev.g_nb then 0 else
-  if (htc pdev0.po ind0 ind1) && not (htc pdev0.po ind1 ind0) then 1 else
-  if (htc pdev0.po ind1 ind0) && not (htc pdev0.po ind0 ind1) then -1 else
-  0
-
-
 
 (*let insert_in_ml ml ind0 tnb0 rightSib link cons_index new_obj gd ld old_obj_list =
   let g_nb0 = rightSib.pdev.g_nb in
@@ -3618,7 +3036,7 @@ let compare_pr ((start0,p0,tnb0),(ind0,rhs0),rn0) ((start1,p1,tnb1),(ind1,rhs1),
 
 let remove_path_edge edge_nb pathList =
   let aux1 e = match e with
-    | { edge_id = n ; dest = _ } when n=edge_nb -> false
+    | { edge_id = n ; _ } when n=edge_nb -> false
     | _ -> true
   in
   let aux2 ((_,p,_),_,_) = List.for_all aux1 p in
@@ -3636,7 +3054,7 @@ let rec remove_sn_from_list sn_nb l res = match l with
 let remove_edge edge_nb sn =
   let rec aux succ_edges res = match succ_edges with
     | [] -> res
-    | {edge_id = n; dest = sn_dest }::t when n=edge_nb ->
+    | {edge_id = n; dest = sn_dest; _ }::t when n=edge_nb ->
         if sn.last_token = sn_dest.last_token then
           sn_dest.prev_nodes_eps <-
           remove_sn_from_list sn.sn_nb sn_dest.prev_nodes_eps [];
@@ -3726,7 +3144,7 @@ let merge_in_edge ppar counters edge_nb (sn, link, cons_index, objdata_list) (to
 (* collect_objs collects objects along the path p.
    The head of the list corresponds to the leftmost
    object in gs. *)
-let rec collect_objs path start_node =
+let collect_objs path start_node =
   let rec aux res = function
     | e1::((e2::_) as tl)  ->
         let str_non_ter = e2.dest.pdev.str_non_ter in
@@ -3850,7 +3268,7 @@ let compute_inherited_values sn ppar next_lexeme =
   let inh_opt = pdev.state_bnt.(state_id) in
   (*let aux inh =*)
   match inh_opt with None -> () | Some inh ->
-    (let actl, argnb, lhs, nt, ed = pdev.inherited.(inh) in
+    (let actl, argnb, lhs, _, ed = pdev.inherited.(inh) in
     let path = make_path sn argnb [] in
     let sn0 = match path with
       | e::_ -> e.dest
@@ -3897,7 +3315,7 @@ let compute_inherited_values sn ppar next_lexeme =
 
 
 
-let complete_reduction topmost rl mm parse_res pr leftSib pdev_rightSib global_data_rS local_data_rS v_rightSib new_obj nt symbol_pos counters ppar cons_index layout_flags ind tnb selfderiv pt next_lexeme start_node =
+let complete_reduction topmost rl mm parse_res _ leftSib pdev_rightSib global_data_rS local_data_rS v_rightSib new_obj nt symbol_pos counters ppar cons_index layout_flags _ tnb selfderiv pt next_lexeme start_node =
 (*pathList pl_recred topmost leftSib pdev_rightSib
 v_rightSib new_obj nt lexer_pos prio counters ppar merge_map cons_index layout_flags edge_map ind tnb =*)
   (*if !dypgen_verbose>2 then
@@ -4032,16 +3450,6 @@ v_rightSib new_obj nt lexer_pos prio counters ppar merge_map cons_index layout_f
       insert_reduction2 rl rightSib counters ppar.use_rule_order in
     rightSib::topmost, rl, mm, parse_res
 
-
-
-let left_rec_rule (nt0,_,_) rhs =
-  try match rhs.(0) with
-    | Ps_Non_ter (nt,_) | Ps_Non_ter_NL (nt,_) -> nt = nt0
-    | _ -> false
-  with Invalid_argument _ -> false
-
-
-
 let print_pathList pathList =
   output_string !log_channel " pathList :\n";
   List.iter (fun ((start_node,p,_),_,rn) ->
@@ -4106,7 +3514,7 @@ let match_chan_s_chan_g v_rightSib pdev_rightSib chan_s chan_g =
 
 
 
-let fold_rightSib_l pr counters symbol_pos start_node last_pdev position_list leftSib ppar non_ter rn ind rhs snd_node next_lexeme layout_flags ind tnb selfderiv pt cons_index (new_obj, will_shift2, keep_gram, newdata, newlocal_data, rapf_add, new_nt_cons, new_relations, chan_s, chan_g, pdev_option) (topmost, rl, mm, parse_res, will_shift) v_rightSib =
+let fold_rightSib_l pr counters symbol_pos start_node last_pdev _ leftSib ppar non_ter rn _ _ snd_node next_lexeme layout_flags ind tnb selfderiv pt cons_index (new_obj, will_shift2, keep_gram, newdata, newlocal_data, rapf_add, new_nt_cons, new_relations, chan_s, chan_g, pdev_option) (topmost, rl, mm, parse_res, will_shift) v_rightSib =
     let v_rightSib, pdev_rightSib =
       if rapf_add = [] then
         (*let lhs =
@@ -4196,7 +3604,7 @@ let fold_rightSib_l pr counters symbol_pos start_node last_pdev position_list le
 
 
 
-let reduce_with_result pr counters symbol_pos start_node last_pdev position_list leftSib ppar non_ter rn v_rightSib ind rhs snd_node next_lexeme layout_flags ind tnb selfderiv pt (topmost, rl, mm, parse_res, will_shift) ((new_obj, will_shift2, keep_gram, newdata, newlocal_data, rapf_add, new_nt_cons, new_relations, chan_s, chan_g, pdev_option) as res) =
+let reduce_with_result pr counters symbol_pos start_node last_pdev position_list leftSib ppar non_ter rn v_rightSib _ rhs snd_node next_lexeme layout_flags ind tnb selfderiv pt (topmost, rl, mm, parse_res, will_shift) ((new_obj, will_shift2, _, _, _, _, _, _, _, _, _) as res) =
     let cons_index = try leftSib.pdev.cons_of_nt.(non_ter)
       with e -> (Printf.printf "dyp.ml reduce_with, error cons_of_nt:%d\n"
         (Array.length leftSib.pdev.cons_of_nt); raise e)
@@ -4263,7 +3671,7 @@ let reduce_with_action ac_l pr counters symbol_pos start_node position_list left
 
 
 
-let process_v_rightSib_l ac_l pr counters symbol_pos start_node last_pdev position_list leftSib ppar non_ter rn ind rhs snd_node layout_flags ind tnb pt obj_ll next_lexeme_precursor (topmost, rl, mm, parse_res, will_shift) (v_rightSib, lS_ind) =
+let process_v_rightSib_l ac_l pr counters symbol_pos start_node last_pdev position_list leftSib ppar non_ter rn _ rhs snd_node layout_flags ind tnb pt obj_ll next_lexeme_precursor (topmost, rl, mm, parse_res, will_shift) (v_rightSib, lS_ind) =
   if !dypgen_verbose>2 then
     (Printf.fprintf !log_channel "obj_ll length=%d\n"
       (List.length obj_ll);
@@ -4465,21 +3873,6 @@ let do_merge mm rl topmost ppar counters =
     flush_all ());
   Int_map.fold (merge_in_edge ppar counters) mm (topmost, rl)
 
-
-
-let print_pr ((sn1,p1,_),_,rn1) ((sn0,p0,_),_,rn0) =
-  print_path sn1 p1;
-  let pdev = sn1.pdev in
-  output_string !log_channel
-    ((str_rule rn1 pdev.gram_rhs pdev.lhs_table pdev.str_non_ter
-    (*pdev.prio.prd_names*) pdev.str_ter pdev.regexp_array)^"\n");
-  print_path sn0 p0;
-  let pdev = sn0.pdev in
-  output_string !log_channel
-    ((str_rule rn0 pdev.gram_rhs pdev.lhs_table pdev.str_non_ter
-    (*pdev.prio.prd_names*) pdev.str_ter pdev.regexp_array)^"\n")
-
-
 let make_reduction_list topmost counters ppar =
   let aux1 pathList sn =
     let st_nb = sn.state_nb and pdev = sn.pdev in
@@ -4516,15 +3909,6 @@ let make_reduction_list topmost counters ppar =
   
   List.fold_left aux1 [] topmost
 
-
-
-let must_merge ((start0,p0,tnb0),(ind0,rhs0),rn0) (ind1,tnb1,g_nb1,(gd1,e1,ld1,odl1)) =
-  if tnb1<tnb0 then false
-  else if tnb1>tnb0 then true
-  else if htc start0.pdev.po ind0 ind1 then true
-  else false
-
-
 let do_reductions topmost counters ppar next_lexeme_precursor =
   
   let rl = make_reduction_list topmost counters ppar in
@@ -4545,7 +3929,7 @@ let do_reductions topmost counters ppar next_lexeme_precursor =
 
 
 
-let do_shifts_for_each tok_name tok_value prevTops lexbuf counters ppar layout lexeme pt sn layout_flags parsing_device next_lexeme_precursor topmost next_state =
+let do_shifts_for_each _ tok_value _ lexbuf counters ppar _ _ pt sn layout_flags parsing_device next_lexeme_precursor topmost next_state =
     try
       (*if not parsing_device.state_is_mergeable.(next_state)
       then raise Find_rightSib_failed else*)
@@ -4743,7 +4127,7 @@ let parse parser_pilot (entry_point:string)
   let parser_pilot = match local_data with
     Some ld -> { parser_pilot with pp_ld = ld } | None -> parser_pilot
   in
-  let counters, topmost, parsing_device, ppar =
+  let counters, topmost, _, ppar =
     init_parser parser_pilot entry_point
     lexpos lexbuf keep_data use_rule_order use_all_actions
   in
@@ -5043,7 +4427,7 @@ let rec lex_token topmost lexbuf layout all_token =
       [] action_id_l
     in
     Some (ter_obj_l, new_topmost, lexbuf, layout)
-  | (_, Some (([], pdev, new_topmost),p)) -> assert false
+  | (_, Some (([], _, _),_)) -> assert false
 
 
 (* Note: next_lexeme may return incorrect result when called from an action that extends the grammar or that uses Keep_grammar. *)
@@ -5064,7 +4448,7 @@ let next_lexeme_precur_lb_pdev lexbuf pdev gd ld =
       try select_token snl lexbuf false false true false
       (* We can take false for all_token (2nd bool) because it doesn't
       change the lexeme. *)
-      with Failure "lexing: empty token" ->
+      with Failure _ ->
         ((*output_string !log_channel "empty token";*)
         None, None)
     in
@@ -5079,20 +4463,20 @@ let next_lexeme_precur_lb_pdev lexbuf pdev gd ld =
       (*Printf.printf "next_lexeme, lex_curr_pos=%d, lex_start_pos=%d, lex_abs_pos=%d\n"
       lexbuf.lb_lexbuf.lex_curr_pos lexbuf.lb_lexbuf.lex_start_pos lexbuf.lb_lexbuf.lex_abs_pos*)
         res
-    | None, (Some ((action_id_l, pdev, _),_)) ->
+    | None, (Some _) ->
       let lexeme =
         try Bytes.to_string (Bytes.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len)
-        with Invalid_argument("String.sub") ->
+        with Invalid_argument _ ->
           (Printf.printf "1; %s\n" (Bytes.to_string (lexbuf.lb_lexbuf.lex_buffer));
           raise (Invalid_argument("String.sub")))
       in
        (if !dypgen_verbose>2 then
          output_string !log_channel "next_lexeme called bis\n";
        next_token (lexeme::res))
-    | (Some ((action_id_l, pdev, _),_)), _ ->
+    | (Some _), _ ->
       let lexeme =
         try Bytes.to_string (Bytes.sub lexbuf.lb_lexbuf.lex_buffer prev_curr_pos len)
-        with Invalid_argument("String.sub") ->
+        with Invalid_argument _ ->
           (Printf.printf "2; %i, %i\n" prev_curr_pos len;
           raise (Invalid_argument("String.sub")))
       in

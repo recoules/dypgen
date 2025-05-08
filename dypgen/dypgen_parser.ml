@@ -1,4 +1,10 @@
 
+let _ =
+  if "20191116" <> Dyp.version
+  then (Printf.fprintf stderr
+    "version mismatch, dypgen version 20191116 and dyplib version %s\n" Dyp.version;
+  exit 2)
+
 type token =
   | EOF
   | STRING of (string)
@@ -762,7 +768,6 @@ let dypgen_use_all_actions = false
 
 # 1 "dypgen_parser.dyp"
 
-open Printf
 open Parse_tree
 open Dyp
 
@@ -811,7 +816,7 @@ let dummy_p = -1,-1,-1,""
 let dummy_pat_inh = "_", (Pat_inh ""), Lexing.dummy_pos
 
 let symbol_list dyp op (symb, add_rules) =
-  let { gd_count=count; gd_symbs=symbs} = dyp.global_data in
+  let { gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
   let pat_typ = match symb with
     | Symb_non_terminal ((s,_),_,_,_)
     | Symb_non_terminal_NL ((s,_),_,_,_) -> s
@@ -867,7 +872,7 @@ let discard_nt nt =
   is_nested nt
 
 let rec dyp_merge_Obj_symbol_list = function
-  | ((o1,gd,ld) as h)::((o2,_,_)::t as l1) ->
+  | ((o1,_,_) as h)::((_,_,_)::t as l1) ->
   begin match o1 with
   (*| (((Symb_regexp (RE_Seq _)),_)::_,_,_,_)
     | (((Symb_regexp_NL (RE_Seq _)),_)::_,_,_,_) ->
@@ -891,46 +896,46 @@ let dypgen_keep_data = `none
 
 
 let _ = () (* dummy line to improve OCaml error location *)
-# 895                "dypgen_parser_temp.ml"
+# 900                "dypgen_parser_temp.ml"
 let __dypgen_ra_list, __dypgen_main_lexer, __dypgen_aux_lexer =
 [
 (("main",[Dyp.Non_ter ("optional_mltop",Dyp.No_priority );Dyp.Non_ter ("optional_code",Dyp.No_priority );Dyp.Non_ter ("parser_param_infos",Dyp.No_priority );Dyp.Non_ter ("dypgen__option_lexer",Dyp.No_priority );Dyp.Non_ter ("parser_begin",Dyp.No_priority );Dyp.Non_ter ("grammar",Dyp.No_priority );Dyp.Non_ter ("optional_trailer",Dyp.No_priority );Dyp.Non_ter ("optional_mlitop",Dyp.No_priority );Dyp.Non_ter ("optional_mlimid",Dyp.No_priority );Dyp.Non_ter ("optional_mli",Dyp.No_priority );Dyp.Ter "EOF"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_optional_mltop ( (
 (_:'dypgen__Obj_optional_mltop)
-# 902                "dypgen_parser_temp.ml"
+# 907                "dypgen_parser_temp.ml"
  as _1));Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 905                "dypgen_parser_temp.ml"
+# 910                "dypgen_parser_temp.ml"
  as _2));Obj_parser_param_infos ( (
 (_:'dypgen__Obj_parser_param_infos)
-# 908                "dypgen_parser_temp.ml"
+# 913                "dypgen_parser_temp.ml"
  as _3));Obj_dypgen__option_lexer ( (
 (_:'dypgen__Obj_lexer option)
-# 911                "dypgen_parser_temp.ml"
+# 916                "dypgen_parser_temp.ml"
  as _4));Obj_parser_begin ( (
 (_:'dypgen__Obj_parser_begin)
-# 914                "dypgen_parser_temp.ml"
+# 919                "dypgen_parser_temp.ml"
  as _5));Obj_grammar ( (
 (_:'dypgen__Obj_grammar)
-# 917                "dypgen_parser_temp.ml"
+# 922                "dypgen_parser_temp.ml"
  as _6));Obj_optional_trailer ( (
 (_:'dypgen__Obj_optional_trailer)
-# 920                "dypgen_parser_temp.ml"
+# 925                "dypgen_parser_temp.ml"
  as _7));Obj_optional_mlitop ( (
 (_:'dypgen__Obj_optional_mlitop)
-# 923                "dypgen_parser_temp.ml"
+# 928                "dypgen_parser_temp.ml"
  as _8));Obj_optional_mlimid ( (
 (_:'dypgen__Obj_optional_mlimid)
-# 926                "dypgen_parser_temp.ml"
+# 931                "dypgen_parser_temp.ml"
  as _9));Obj_optional_mli ( (
 (_:'dypgen__Obj_optional_mli)
-# 929                "dypgen_parser_temp.ml"
+# 934                "dypgen_parser_temp.ml"
  as _10)); _11] -> Obj_main 
-# 146 "dypgen_parser.dyp"
+# 145 "dypgen_parser.dyp"
 (
   ( (_1,_2,_3,_4,(*List.rev*) _6,_7,_8,_9,_10) ):'dypgen__Obj_main)
-# 934                "dypgen_parser_temp.ml"
+# 939                "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -939,7 +944,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__option_lexer 
 (
 (None):'dypgen__Obj_lexer option)
-# 943                "dypgen_parser_temp.ml"
+# 948                "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -947,31 +952,31 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_lexer ( (
 (_:'dypgen__Obj_lexer)
-# 951                "dypgen_parser_temp.ml"
+# 956                "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__option_lexer 
 (
 (Some _1):'dypgen__Obj_lexer option)
-# 955                "dypgen_parser_temp.ml"
+# 960                "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("parser_begin",[Dyp.Ter "PERCENTPERCENT"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_parser_begin 
-# 149 "dypgen_parser.dyp"
+# 148 "dypgen_parser.dyp"
 (
                   ():'dypgen__Obj_parser_begin)
-# 965                "dypgen_parser_temp.ml"
+# 970                "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("parser_begin",[Dyp.Ter "KWD_PARSER"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_parser_begin 
-# 150 "dypgen_parser.dyp"
+# 149 "dypgen_parser.dyp"
 (
                    ():'dypgen__Obj_parser_begin)
-# 975                "dypgen_parser_temp.ml"
+# 980                "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -979,12 +984,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_dypgen__star___regexp_decl ( (
 (_:'dypgen__Obj_regexp_decl list)
-# 983                "dypgen_parser_temp.ml"
+# 988                "dypgen_parser_temp.ml"
  as _2));Obj_dypgen__nested_nt_2 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_2)
-# 986                "dypgen_parser_temp.ml"
+# 991                "dypgen_parser_temp.ml"
  as _3))] -> Obj_lexer 
-# 154 "dypgen_parser.dyp"
+# 153 "dypgen_parser.dyp"
 (
     ( match _2, _3 with
     | [], None -> [], [], []
@@ -992,7 +997,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
     | _, Some (auxl, mainl) ->
     use_dyplex := true;
     (_2, (match auxl with None -> [] | Some l -> l), mainl) ):'dypgen__Obj_lexer)
-# 996                "dypgen_parser_temp.ml"
+# 1001               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1000,11 +1005,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_0 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_0)
-# 1004               "dypgen_parser_temp.ml"
+# 1009               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__star___regexp_decl 
 (
 (List.rev _1):'dypgen__Obj_regexp_decl list)
-# 1008               "dypgen_parser_temp.ml"
+# 1013               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1012,14 +1017,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_0 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_0)
-# 1016               "dypgen_parser_temp.ml"
+# 1021               "dypgen_parser_temp.ml"
  as _1));Obj_regexp_decl ( (
 (_:'dypgen__Obj_regexp_decl)
-# 1019               "dypgen_parser_temp.ml"
+# 1024               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_0 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_0)
-# 1023               "dypgen_parser_temp.ml"
+# 1028               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1028,7 +1033,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__nested_nt_0 
 (
 ([]):'dypgen__Obj_dypgen__nested_nt_0)
-# 1032               "dypgen_parser_temp.ml"
+# 1037               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1036,15 +1041,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__option_aux_lexer ( (
 (_:'dypgen__Obj_aux_lexer option)
-# 1040               "dypgen_parser_temp.ml"
+# 1045               "dypgen_parser_temp.ml"
  as _1));Obj_main_lexer ( (
 (_:'dypgen__Obj_main_lexer)
-# 1043               "dypgen_parser_temp.ml"
+# 1048               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_1 
-# 153 "dypgen_parser.dyp"
+# 152 "dypgen_parser.dyp"
 (
                                                   (_1,_2):'dypgen__Obj_dypgen__nested_nt_1)
-# 1048               "dypgen_parser_temp.ml"
+# 1053               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1053,7 +1058,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__option_aux_lexer 
 (
 (None):'dypgen__Obj_aux_lexer option)
-# 1057               "dypgen_parser_temp.ml"
+# 1062               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1061,11 +1066,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_aux_lexer ( (
 (_:'dypgen__Obj_aux_lexer)
-# 1065               "dypgen_parser_temp.ml"
+# 1070               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__option_aux_lexer 
 (
 (Some _1):'dypgen__Obj_aux_lexer option)
-# 1069               "dypgen_parser_temp.ml"
+# 1074               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1074,7 +1079,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__nested_nt_2 
 (
 (None):'dypgen__Obj_dypgen__nested_nt_2)
-# 1078               "dypgen_parser_temp.ml"
+# 1083               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1082,32 +1087,32 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_1 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_1)
-# 1086               "dypgen_parser_temp.ml"
+# 1091               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__nested_nt_2 
 (
 (Some _1):'dypgen__Obj_dypgen__nested_nt_2)
-# 1090               "dypgen_parser_temp.ml"
+# 1095               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("main_lexer",[Dyp.Ter "LIDENT";Dyp.Ter "LIDENT";Dyp.Ter "EQUAL";Dyp.Non_ter ("dypgen__star___lexer_rule",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 163 "dypgen_parser.dyp"
+# 162 "dypgen_parser.dyp"
         ("main",_:(string * (int * int * int * string)))
-# 1099               "dypgen_parser_temp.ml"
+# 1104               "dypgen_parser_temp.ml"
  as _1);Obj_LIDENT  (
-# 163 "dypgen_parser.dyp"
+# 162 "dypgen_parser.dyp"
                          ("lexer",_:(string * (int * int * int * string)))
-# 1103               "dypgen_parser_temp.ml"
+# 1108               "dypgen_parser_temp.ml"
  as _2); _3;Obj_dypgen__star___lexer_rule ( (
 (_:'dypgen__Obj_lexer_rule list)
-# 1106               "dypgen_parser_temp.ml"
+# 1111               "dypgen_parser_temp.ml"
  as _4))] -> Obj_main_lexer 
-# 162 "dypgen_parser.dyp"
+# 161 "dypgen_parser.dyp"
 (
                                                         ( _4 ):'dypgen__Obj_main_lexer)
-# 1111               "dypgen_parser_temp.ml"
+# 1116               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1115,11 +1120,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_3 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_3)
-# 1119               "dypgen_parser_temp.ml"
+# 1124               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__star___lexer_rule 
 (
 (List.rev _1):'dypgen__Obj_lexer_rule list)
-# 1123               "dypgen_parser_temp.ml"
+# 1128               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1127,14 +1132,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_3 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_3)
-# 1131               "dypgen_parser_temp.ml"
+# 1136               "dypgen_parser_temp.ml"
  as _1));Obj_lexer_rule ( (
 (_:'dypgen__Obj_lexer_rule)
-# 1134               "dypgen_parser_temp.ml"
+# 1139               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_3 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_3)
-# 1138               "dypgen_parser_temp.ml"
+# 1143               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1143,7 +1148,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__nested_nt_3 
 (
 ([]):'dypgen__Obj_dypgen__nested_nt_3)
-# 1147               "dypgen_parser_temp.ml"
+# 1152               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1151,61 +1156,61 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1155               "dypgen_parser_temp.ml"
+# 1160               "dypgen_parser_temp.ml"
  as _1)); _2;Obj_opt_token_name ( (
 (_:'dypgen__Obj_opt_token_name)
-# 1158               "dypgen_parser_temp.ml"
+# 1163               "dypgen_parser_temp.ml"
  as _3));Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 1161               "dypgen_parser_temp.ml"
+# 1166               "dypgen_parser_temp.ml"
  as _4))] -> Obj_lexer_rule 
-# 165 "dypgen_parser.dyp"
+# 164 "dypgen_parser.dyp"
 (
                                             ( (_1,_3,_4) ):'dypgen__Obj_lexer_rule)
-# 1166               "dypgen_parser_temp.ml"
+# 1171               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_token_name",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_opt_token_name 
-# 168 "dypgen_parser.dyp"
+# 167 "dypgen_parser.dyp"
 (
     ( "__dypgen_layout" ):'dypgen__Obj_opt_token_name)
-# 1176               "dypgen_parser_temp.ml"
+# 1181               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_token_name",[Dyp.Ter "UIDENT"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_UIDENT  (
-# 170 "dypgen_parser.dyp"
-          (n,_:(string * (int * int * int * string)))
-# 1185               "dypgen_parser_temp.ml"
- as _1)] -> Obj_opt_token_name 
 # 169 "dypgen_parser.dyp"
+          (n,_:(string * (int * int * int * string)))
+# 1190               "dypgen_parser_temp.ml"
+ as _1)] -> Obj_opt_token_name 
+# 168 "dypgen_parser.dyp"
 (
                 ( n ):'dypgen__Obj_opt_token_name)
-# 1190               "dypgen_parser_temp.ml"
+# 1195               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("regexp_decl",[Dyp.Ter "LET";Dyp.Ter "LIDENT";Dyp.Ter "EQUAL";Dyp.Non_ter ("regexp",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
-# 173 "dypgen_parser.dyp"
+# 172 "dypgen_parser.dyp"
             (n,_:(string * (int * int * int * string)))
-# 1199               "dypgen_parser_temp.ml"
+# 1204               "dypgen_parser_temp.ml"
  as _2); _3;Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1202               "dypgen_parser_temp.ml"
+# 1207               "dypgen_parser_temp.ml"
  as _4))] ->  let res = 
-# 173 "dypgen_parser.dyp"
+# 172 "dypgen_parser.dyp"
 (
     ( (n,_4),
     [Dyp.Global_data {dyp.global_data with gd_regexp_decl =
       String_set.add n dyp.global_data.gd_regexp_decl}] ):'dypgen__Obj_regexp_decl * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 1209               "dypgen_parser_temp.ml"
+# 1214               "dypgen_parser_temp.ml"
   in Obj_regexp_decl(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -1214,15 +1219,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_aux_lexer_rule ( (
 (_:'dypgen__Obj_aux_lexer_rule)
-# 1218               "dypgen_parser_temp.ml"
+# 1223               "dypgen_parser_temp.ml"
  as _1));Obj_dypgen__star___aux_lexer_and ( (
 (_:'dypgen__Obj_aux_lexer_and list)
-# 1221               "dypgen_parser_temp.ml"
+# 1226               "dypgen_parser_temp.ml"
  as _2))] -> Obj_aux_lexer 
-# 178 "dypgen_parser.dyp"
+# 177 "dypgen_parser.dyp"
 (
                                  ( _1::_2 ):'dypgen__Obj_aux_lexer)
-# 1226               "dypgen_parser_temp.ml"
+# 1231               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1230,11 +1235,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_4 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_4)
-# 1234               "dypgen_parser_temp.ml"
+# 1239               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__star___aux_lexer_and 
 (
 (List.rev _1):'dypgen__Obj_aux_lexer_and list)
-# 1238               "dypgen_parser_temp.ml"
+# 1243               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1242,14 +1247,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_4 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_4)
-# 1246               "dypgen_parser_temp.ml"
+# 1251               "dypgen_parser_temp.ml"
  as _1));Obj_aux_lexer_and ( (
 (_:'dypgen__Obj_aux_lexer_and)
-# 1249               "dypgen_parser_temp.ml"
+# 1254               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_4 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_4)
-# 1253               "dypgen_parser_temp.ml"
+# 1258               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1258,31 +1263,31 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__nested_nt_4 
 (
 ([]):'dypgen__Obj_dypgen__nested_nt_4)
-# 1262               "dypgen_parser_temp.ml"
+# 1267               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("aux_lexer_rule",[Dyp.Ter "LIDENT";Dyp.Non_ter ("dypgen__plus___lident",Dyp.No_priority );Dyp.Ter "EQUAL";Dyp.Ter "LIDENT";Dyp.Non_ter ("aux_lexer_def",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 182 "dypgen_parser.dyp"
+# 181 "dypgen_parser.dyp"
         ("rule",_:(string * (int * int * int * string)))
-# 1271               "dypgen_parser_temp.ml"
+# 1276               "dypgen_parser_temp.ml"
  as _1);Obj_dypgen__plus___lident ( (
 (_:'dypgen__Obj_lident list)
-# 1274               "dypgen_parser_temp.ml"
+# 1279               "dypgen_parser_temp.ml"
  as _2)); _3;Obj_LIDENT  (
-# 182 "dypgen_parser.dyp"
+# 181 "dypgen_parser.dyp"
                                         ("parse",_:(string * (int * int * int * string)))
-# 1278               "dypgen_parser_temp.ml"
+# 1283               "dypgen_parser_temp.ml"
  as _4);Obj_aux_lexer_def ( (
 (_:'dypgen__Obj_aux_lexer_def)
-# 1281               "dypgen_parser_temp.ml"
+# 1286               "dypgen_parser_temp.ml"
  as _5))] -> Obj_aux_lexer_rule 
-# 182 "dypgen_parser.dyp"
+# 181 "dypgen_parser.dyp"
 (
   ( (_2,_5) ):'dypgen__Obj_aux_lexer_rule)
-# 1286               "dypgen_parser_temp.ml"
+# 1291               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1290,11 +1295,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_5 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_5)
-# 1294               "dypgen_parser_temp.ml"
+# 1299               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__plus___lident 
 (
 (List.rev _1):'dypgen__Obj_lident list)
-# 1298               "dypgen_parser_temp.ml"
+# 1303               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1302,14 +1307,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_5 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_5)
-# 1306               "dypgen_parser_temp.ml"
+# 1311               "dypgen_parser_temp.ml"
  as _1));Obj_lident ( (
 (_:'dypgen__Obj_lident)
-# 1309               "dypgen_parser_temp.ml"
+# 1314               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_5 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_5)
-# 1313               "dypgen_parser_temp.ml"
+# 1318               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1317,49 +1322,49 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_lident ( (
 (_:'dypgen__Obj_lident)
-# 1321               "dypgen_parser_temp.ml"
+# 1326               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__nested_nt_5 
 (
 ([_1]):'dypgen__Obj_dypgen__nested_nt_5)
-# 1325               "dypgen_parser_temp.ml"
+# 1330               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("aux_lexer_and",[Dyp.Ter "LIDENT";Dyp.Non_ter ("dypgen__plus___lident",Dyp.No_priority );Dyp.Ter "EQUAL";Dyp.Ter "LIDENT";Dyp.Non_ter ("aux_lexer_def",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 186 "dypgen_parser.dyp"
+# 185 "dypgen_parser.dyp"
         ("and",_:(string * (int * int * int * string)))
-# 1334               "dypgen_parser_temp.ml"
+# 1339               "dypgen_parser_temp.ml"
  as _1);Obj_dypgen__plus___lident ( (
 (_:'dypgen__Obj_lident list)
-# 1337               "dypgen_parser_temp.ml"
+# 1342               "dypgen_parser_temp.ml"
  as _2)); _3;Obj_LIDENT  (
-# 186 "dypgen_parser.dyp"
+# 185 "dypgen_parser.dyp"
                                        ("parse",_:(string * (int * int * int * string)))
-# 1341               "dypgen_parser_temp.ml"
+# 1346               "dypgen_parser_temp.ml"
  as _4);Obj_aux_lexer_def ( (
 (_:'dypgen__Obj_aux_lexer_def)
-# 1344               "dypgen_parser_temp.ml"
+# 1349               "dypgen_parser_temp.ml"
  as _5))] -> Obj_aux_lexer_and 
-# 186 "dypgen_parser.dyp"
+# 185 "dypgen_parser.dyp"
 (
   ( (_2,_5) ):'dypgen__Obj_aux_lexer_and)
-# 1349               "dypgen_parser_temp.ml"
+# 1354               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("lident",[Dyp.Ter "LIDENT"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 189 "dypgen_parser.dyp"
-              (name,_:(string * (int * int * int * string)))
-# 1358               "dypgen_parser_temp.ml"
- as _1)] -> Obj_lident 
 # 188 "dypgen_parser.dyp"
+              (name,_:(string * (int * int * int * string)))
+# 1363               "dypgen_parser_temp.ml"
+ as _1)] -> Obj_lident 
+# 187 "dypgen_parser.dyp"
 (
                        ( name ):'dypgen__Obj_lident)
-# 1363               "dypgen_parser_temp.ml"
+# 1368               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1367,18 +1372,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__option_BAR ( (
 (_:'dypgen__Obj_dypgen__option_BAR)
-# 1371               "dypgen_parser_temp.ml"
+# 1376               "dypgen_parser_temp.ml"
  as _1));Obj_dypgen__nested_nt_6 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_6)
-# 1374               "dypgen_parser_temp.ml"
+# 1379               "dypgen_parser_temp.ml"
  as _2));Obj_dypgen__nested_nt_8 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_8)
-# 1377               "dypgen_parser_temp.ml"
+# 1382               "dypgen_parser_temp.ml"
  as _3))] -> Obj_aux_lexer_def 
-# 193 "dypgen_parser.dyp"
+# 192 "dypgen_parser.dyp"
 (
   ( _2::_3 ):'dypgen__Obj_aux_lexer_def)
-# 1382               "dypgen_parser_temp.ml"
+# 1387               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1387,7 +1392,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__option_BAR 
 (
 (None):'dypgen__Obj_dypgen__option_BAR)
-# 1391               "dypgen_parser_temp.ml"
+# 1396               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1396,7 +1401,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_dypgen__option_BAR 
 (
 (None):'dypgen__Obj_dypgen__option_BAR)
-# 1400               "dypgen_parser_temp.ml"
+# 1405               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1404,15 +1409,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1408               "dypgen_parser_temp.ml"
+# 1413               "dypgen_parser_temp.ml"
  as _1));Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 1411               "dypgen_parser_temp.ml"
+# 1416               "dypgen_parser_temp.ml"
  as _2)] -> Obj_dypgen__nested_nt_6 
-# 191 "dypgen_parser.dyp"
+# 190 "dypgen_parser.dyp"
 (
                            (_1,_2):'dypgen__Obj_dypgen__nested_nt_6)
-# 1416               "dypgen_parser_temp.ml"
+# 1421               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1420,15 +1425,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1424               "dypgen_parser_temp.ml"
+# 1429               "dypgen_parser_temp.ml"
  as _2));Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 1427               "dypgen_parser_temp.ml"
+# 1432               "dypgen_parser_temp.ml"
  as _3)] -> Obj_dypgen__nested_nt_7 
-# 192 "dypgen_parser.dyp"
+# 191 "dypgen_parser.dyp"
 (
                          (_2,_3):'dypgen__Obj_dypgen__nested_nt_7)
-# 1432               "dypgen_parser_temp.ml"
+# 1437               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1436,11 +1441,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_9 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_9)
-# 1440               "dypgen_parser_temp.ml"
+# 1445               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__nested_nt_8 
 (
 (List.rev _1):'dypgen__Obj_dypgen__nested_nt_8)
-# 1444               "dypgen_parser_temp.ml"
+# 1449               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1448,14 +1453,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_9 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_9)
-# 1452               "dypgen_parser_temp.ml"
+# 1457               "dypgen_parser_temp.ml"
  as _1));Obj_dypgen__nested_nt_7 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_7)
-# 1455               "dypgen_parser_temp.ml"
+# 1460               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_9 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_9)
-# 1459               "dypgen_parser_temp.ml"
+# 1464               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1464,7 +1469,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__nested_nt_9 
 (
 ([]):'dypgen__Obj_dypgen__nested_nt_9)
-# 1468               "dypgen_parser_temp.ml"
+# 1473               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1472,12 +1477,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_CHAR  (
 (_:(char))
-# 1476               "dypgen_parser_temp.ml"
+# 1481               "dypgen_parser_temp.ml"
  as _1)] -> Obj_regexp 
-# 196 "dypgen_parser.dyp"
+# 195 "dypgen_parser.dyp"
 (
          ( RE_Char _1 ):'dypgen__Obj_regexp)
-# 1481               "dypgen_parser_temp.ml"
+# 1486               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1485,12 +1490,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_dypgen__plus___char_elt ( (
 (_:'dypgen__Obj_char_elt list)
-# 1489               "dypgen_parser_temp.ml"
+# 1494               "dypgen_parser_temp.ml"
  as _2)); _3] -> Obj_regexp 
-# 197 "dypgen_parser.dyp"
+# 196 "dypgen_parser.dyp"
 (
                              ( RE_Char_set _2 ):'dypgen__Obj_regexp)
-# 1494               "dypgen_parser_temp.ml"
+# 1499               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1498,12 +1503,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1; _2;Obj_dypgen__plus___char_elt ( (
 (_:'dypgen__Obj_char_elt list)
-# 1502               "dypgen_parser_temp.ml"
+# 1507               "dypgen_parser_temp.ml"
  as _3)); _4] -> Obj_regexp 
-# 198 "dypgen_parser.dyp"
+# 197 "dypgen_parser.dyp"
 (
                                    ( RE_Char_set_exclu _3 ):'dypgen__Obj_regexp)
-# 1507               "dypgen_parser_temp.ml"
+# 1512               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1511,12 +1516,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_STRING  (
 (_:(string))
-# 1515               "dypgen_parser_temp.ml"
+# 1520               "dypgen_parser_temp.ml"
  as _1)] -> Obj_regexp 
-# 199 "dypgen_parser.dyp"
+# 198 "dypgen_parser.dyp"
 (
            ( RE_String _1 ):'dypgen__Obj_regexp)
-# 1520               "dypgen_parser_temp.ml"
+# 1525               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1524,15 +1529,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1528               "dypgen_parser_temp.ml"
+# 1533               "dypgen_parser_temp.ml"
  as _1)); _2;Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1531               "dypgen_parser_temp.ml"
+# 1536               "dypgen_parser_temp.ml"
  as _3))] -> Obj_regexp 
-# 200 "dypgen_parser.dyp"
+# 199 "dypgen_parser.dyp"
 (
                              ( RE_Alt [_1;_3] ):'dypgen__Obj_regexp)
-# 1536               "dypgen_parser_temp.ml"
+# 1541               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1540,15 +1545,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1544               "dypgen_parser_temp.ml"
+# 1549               "dypgen_parser_temp.ml"
  as _1));Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1547               "dypgen_parser_temp.ml"
+# 1552               "dypgen_parser_temp.ml"
  as _2))] -> Obj_regexp 
-# 201 "dypgen_parser.dyp"
+# 200 "dypgen_parser.dyp"
 (
                                  ( RE_Seq [_1;_2] ):'dypgen__Obj_regexp)
-# 1552               "dypgen_parser_temp.ml"
+# 1557               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1556,12 +1561,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1560               "dypgen_parser_temp.ml"
+# 1565               "dypgen_parser_temp.ml"
  as _1)); _2] -> Obj_regexp 
-# 202 "dypgen_parser.dyp"
+# 201 "dypgen_parser.dyp"
 (
                      ( RE_Star _1 ):'dypgen__Obj_regexp)
-# 1565               "dypgen_parser_temp.ml"
+# 1570               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1569,12 +1574,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1573               "dypgen_parser_temp.ml"
+# 1578               "dypgen_parser_temp.ml"
  as _1)); _2] -> Obj_regexp 
-# 203 "dypgen_parser.dyp"
+# 202 "dypgen_parser.dyp"
 (
                      ( RE_Plus _1 ):'dypgen__Obj_regexp)
-# 1578               "dypgen_parser_temp.ml"
+# 1583               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1582,23 +1587,23 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1586               "dypgen_parser_temp.ml"
+# 1591               "dypgen_parser_temp.ml"
  as _1)); _2] -> Obj_regexp 
-# 204 "dypgen_parser.dyp"
+# 203 "dypgen_parser.dyp"
 (
                          ( RE_Option _1 ):'dypgen__Obj_regexp)
-# 1591               "dypgen_parser_temp.ml"
+# 1596               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("regexp",[Dyp.Ter "LIDENT"],"p1",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 206 "dypgen_parser.dyp"
-          (name,_:(string * (int * int * int * string)))
-# 1600               "dypgen_parser_temp.ml"
- as _1)] -> Obj_regexp 
 # 205 "dypgen_parser.dyp"
+          (name,_:(string * (int * int * int * string)))
+# 1605               "dypgen_parser_temp.ml"
+ as _1)] -> Obj_regexp 
+# 204 "dypgen_parser.dyp"
 (
                    (
       if name = "eof" then RE_Eof_char
@@ -1607,7 +1612,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
       else if String_set.mem name dyp.global_data.gd_regexp_decl
       then RE_Name name
       else raise Giveup ):'dypgen__Obj_regexp)
-# 1611               "dypgen_parser_temp.ml"
+# 1616               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1615,12 +1620,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1619               "dypgen_parser_temp.ml"
+# 1624               "dypgen_parser_temp.ml"
  as _2)); _3] -> Obj_regexp 
-# 212 "dypgen_parser.dyp"
+# 211 "dypgen_parser.dyp"
 (
                          ( _2 ):'dypgen__Obj_regexp)
-# 1624               "dypgen_parser_temp.ml"
+# 1629               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1628,11 +1633,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_10 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_10)
-# 1632               "dypgen_parser_temp.ml"
+# 1637               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__plus___char_elt 
 (
 (List.rev _1):'dypgen__Obj_char_elt list)
-# 1636               "dypgen_parser_temp.ml"
+# 1641               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1640,14 +1645,14 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_dypgen__nested_nt_10 ( (
 (_:'dypgen__Obj_dypgen__nested_nt_10)
-# 1644               "dypgen_parser_temp.ml"
+# 1649               "dypgen_parser_temp.ml"
  as _1));Obj_char_elt ( (
 (_:'dypgen__Obj_char_elt)
-# 1647               "dypgen_parser_temp.ml"
+# 1652               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_10 
 (
 (_2::_1):'dypgen__Obj_dypgen__nested_nt_10)
-# 1651               "dypgen_parser_temp.ml"
+# 1656               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1655,11 +1660,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_char_elt ( (
 (_:'dypgen__Obj_char_elt)
-# 1659               "dypgen_parser_temp.ml"
+# 1664               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__nested_nt_10 
 (
 ([_1]):'dypgen__Obj_dypgen__nested_nt_10)
-# 1663               "dypgen_parser_temp.ml"
+# 1668               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1667,12 +1672,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1671               "dypgen_parser_temp.ml"
+# 1676               "dypgen_parser_temp.ml"
  as _1))] -> Obj_regexp_ter 
-# 214 "dypgen_parser.dyp"
+# 213 "dypgen_parser.dyp"
 (
                           ( _1 ):'dypgen__Obj_regexp_ter)
-# 1676               "dypgen_parser_temp.ml"
+# 1681               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1680,12 +1685,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_CHAR  (
 (_:(char))
-# 1684               "dypgen_parser_temp.ml"
+# 1689               "dypgen_parser_temp.ml"
  as _1)] -> Obj_char_elt 
-# 217 "dypgen_parser.dyp"
+# 216 "dypgen_parser.dyp"
 (
          ( (_1,_1) ):'dypgen__Obj_char_elt)
-# 1689               "dypgen_parser_temp.ml"
+# 1694               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1693,25 +1698,25 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_CHAR  (
 (_:(char))
-# 1697               "dypgen_parser_temp.ml"
+# 1702               "dypgen_parser_temp.ml"
  as _1); _2;Obj_CHAR  (
 (_:(char))
-# 1700               "dypgen_parser_temp.ml"
+# 1705               "dypgen_parser_temp.ml"
  as _3)] -> Obj_char_elt 
-# 218 "dypgen_parser.dyp"
+# 217 "dypgen_parser.dyp"
 (
                    ( (_1,_3) ):'dypgen__Obj_char_elt)
-# 1705               "dypgen_parser_temp.ml"
+# 1710               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_trailer",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_trailer 
-# 221 "dypgen_parser.dyp"
+# 220 "dypgen_parser.dyp"
 (
                               ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_trailer)
-# 1715               "dypgen_parser_temp.ml"
+# 1720               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1719,22 +1724,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 1723               "dypgen_parser_temp.ml"
+# 1728               "dypgen_parser_temp.ml"
  as _2)] -> Obj_optional_trailer 
-# 222 "dypgen_parser.dyp"
+# 221 "dypgen_parser.dyp"
 (
                               ( (fst _2,fst (snd _2)) ):'dypgen__Obj_optional_trailer)
-# 1728               "dypgen_parser_temp.ml"
+# 1733               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("parser_param_info",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_parser_param_info 
-# 225 "dypgen_parser.dyp"
+# 224 "dypgen_parser.dyp"
 (
      ( empty_ppi ):'dypgen__Obj_parser_param_info)
-# 1738               "dypgen_parser_temp.ml"
+# 1743               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1742,15 +1747,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_optional_type ( (
 (_:'dypgen__Obj_optional_type)
-# 1746               "dypgen_parser_temp.ml"
+# 1751               "dypgen_parser_temp.ml"
  as _2));Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 1749               "dypgen_parser_temp.ml"
+# 1754               "dypgen_parser_temp.ml"
  as _3)] -> Obj_parser_param_info 
-# 227 "dypgen_parser.dyp"
+# 226 "dypgen_parser.dyp"
 (
       ( {empty_ppi with start = [((fst _3),_2)]} ):'dypgen__Obj_parser_param_info)
-# 1754               "dypgen_parser_temp.ml"
+# 1759               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1758,12 +1763,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_token_list ( (
 (_:'dypgen__Obj_token_list)
-# 1762               "dypgen_parser_temp.ml"
+# 1767               "dypgen_parser_temp.ml"
  as _1))] -> Obj_parser_param_info 
-# 228 "dypgen_parser.dyp"
+# 227 "dypgen_parser.dyp"
 (
                                  ( {empty_ppi with token_list = _1} ):'dypgen__Obj_parser_param_info)
-# 1767               "dypgen_parser_temp.ml"
+# 1772               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1771,12 +1776,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_relation ( (
 (_:'dypgen__Obj_relation)
-# 1775               "dypgen_parser_temp.ml"
+# 1780               "dypgen_parser_temp.ml"
  as _1))] -> Obj_parser_param_info 
-# 229 "dypgen_parser.dyp"
+# 228 "dypgen_parser.dyp"
 (
                                  ( {empty_ppi with relation = _1} ):'dypgen__Obj_parser_param_info)
-# 1780               "dypgen_parser_temp.ml"
+# 1785               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1784,15 +1789,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 1788               "dypgen_parser_temp.ml"
+# 1793               "dypgen_parser_temp.ml"
  as _2); _3;Obj_ident_list ( (
 (_:'dypgen__Obj_ident_list)
-# 1791               "dypgen_parser_temp.ml"
+# 1796               "dypgen_parser_temp.ml"
  as _4))] -> Obj_parser_param_info 
-# 231 "dypgen_parser.dyp"
+# 230 "dypgen_parser.dyp"
 (
       ( { empty_ppi with cons = [(fst _2,List.rev _4)] }  ):'dypgen__Obj_parser_param_info)
-# 1796               "dypgen_parser_temp.ml"
+# 1801               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1800,12 +1805,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_uident_list ( (
 (_:'dypgen__Obj_uident_list)
-# 1804               "dypgen_parser_temp.ml"
+# 1809               "dypgen_parser_temp.ml"
  as _2))] -> Obj_parser_param_info 
-# 233 "dypgen_parser.dyp"
+# 232 "dypgen_parser.dyp"
 (
       ( { empty_ppi with additional_cons = List.rev _2 }  ):'dypgen__Obj_parser_param_info)
-# 1809               "dypgen_parser_temp.ml"
+# 1814               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1813,15 +1818,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 1817               "dypgen_parser_temp.ml"
+# 1822               "dypgen_parser_temp.ml"
  as _2);Obj_uident_list ( (
 (_:'dypgen__Obj_uident_list)
-# 1820               "dypgen_parser_temp.ml"
+# 1825               "dypgen_parser_temp.ml"
  as _3))] -> Obj_parser_param_info 
-# 235 "dypgen_parser.dyp"
+# 234 "dypgen_parser.dyp"
 (
       ( {empty_ppi with generic_merge = [((fst _2),List.rev _3)]} ):'dypgen__Obj_parser_param_info)
-# 1825               "dypgen_parser_temp.ml"
+# 1830               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1829,15 +1834,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_TYPE  (
 (_:(string))
-# 1833               "dypgen_parser_temp.ml"
+# 1838               "dypgen_parser_temp.ml"
  as _2);Obj_lident_list ( (
 (_:'dypgen__Obj_lident_list)
-# 1836               "dypgen_parser_temp.ml"
+# 1841               "dypgen_parser_temp.ml"
  as _3))] -> Obj_parser_param_info 
-# 237 "dypgen_parser.dyp"
+# 236 "dypgen_parser.dyp"
 (
       ( {empty_ppi with nt_type = [_2,List.rev _3]} ):'dypgen__Obj_parser_param_info)
-# 1841               "dypgen_parser_temp.ml"
+# 1846               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1845,15 +1850,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_regexp ( (
 (_:'dypgen__Obj_regexp)
-# 1849               "dypgen_parser_temp.ml"
+# 1854               "dypgen_parser_temp.ml"
  as _2));Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 1852               "dypgen_parser_temp.ml"
+# 1857               "dypgen_parser_temp.ml"
  as _3))] -> Obj_parser_param_info 
-# 239 "dypgen_parser.dyp"
+# 238 "dypgen_parser.dyp"
 (
       ( {empty_ppi with layout = [_2,_3]} ):'dypgen__Obj_parser_param_info)
-# 1857               "dypgen_parser_temp.ml"
+# 1862               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1861,12 +1866,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_lident_list ( (
 (_:'dypgen__Obj_lident_list)
-# 1865               "dypgen_parser_temp.ml"
+# 1870               "dypgen_parser_temp.ml"
  as _2))] -> Obj_parser_param_info 
-# 241 "dypgen_parser.dyp"
+# 240 "dypgen_parser.dyp"
 (
       ( {empty_ppi with single_nt = List.rev _2} ):'dypgen__Obj_parser_param_info)
-# 1870               "dypgen_parser_temp.ml"
+# 1875               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1874,12 +1879,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_parser_param_info ( (
 (_:'dypgen__Obj_parser_param_info)
-# 1878               "dypgen_parser_temp.ml"
+# 1883               "dypgen_parser_temp.ml"
  as _1))] -> Obj_parser_param_infos 
-# 244 "dypgen_parser.dyp"
+# 243 "dypgen_parser.dyp"
 (
                       ( _1 ):'dypgen__Obj_parser_param_infos)
-# 1883               "dypgen_parser_temp.ml"
+# 1888               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1887,12 +1892,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_parser_param_infos ( (
 (_:'dypgen__Obj_parser_param_infos)
-# 1891               "dypgen_parser_temp.ml"
+# 1896               "dypgen_parser_temp.ml"
  as _1));Obj_parser_param_info ( (
 (_:'dypgen__Obj_parser_param_info)
-# 1894               "dypgen_parser_temp.ml"
+# 1899               "dypgen_parser_temp.ml"
  as _2))] ->  let res = 
-# 246 "dypgen_parser.dyp"
+# 245 "dypgen_parser.dyp"
 (
      (
       { token_list = (_2.token_list@_1.token_list);
@@ -1905,7 +1910,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
         single_nt = _2.single_nt@_1.single_nt;
         layout = _2.layout@_1.layout },
         [Dyp.Dont_shift] ):'dypgen__Obj_parser_param_infos * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 1909               "dypgen_parser_temp.ml"
+# 1914               "dypgen_parser_temp.ml"
   in Obj_parser_param_infos(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -1914,12 +1919,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 1918               "dypgen_parser_temp.ml"
+# 1923               "dypgen_parser_temp.ml"
  as _1)] -> Obj_lident_list 
-# 259 "dypgen_parser.dyp"
+# 258 "dypgen_parser.dyp"
 (
                        ( [(fst _1)] ):'dypgen__Obj_lident_list)
-# 1923               "dypgen_parser_temp.ml"
+# 1928               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1927,15 +1932,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_lident_list ( (
 (_:'dypgen__Obj_lident_list)
-# 1931               "dypgen_parser_temp.ml"
+# 1936               "dypgen_parser_temp.ml"
  as _1));Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 1934               "dypgen_parser_temp.ml"
+# 1939               "dypgen_parser_temp.ml"
  as _2)] -> Obj_lident_list 
-# 260 "dypgen_parser.dyp"
+# 259 "dypgen_parser.dyp"
 (
                        ( (fst _2)::_1 ):'dypgen__Obj_lident_list)
-# 1939               "dypgen_parser_temp.ml"
+# 1944               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1943,12 +1948,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 1947               "dypgen_parser_temp.ml"
+# 1952               "dypgen_parser_temp.ml"
  as _1)] -> Obj_uident_list 
-# 263 "dypgen_parser.dyp"
+# 262 "dypgen_parser.dyp"
 (
                        ( [(fst _1)] ):'dypgen__Obj_uident_list)
-# 1952               "dypgen_parser_temp.ml"
+# 1957               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1956,15 +1961,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_uident_list ( (
 (_:'dypgen__Obj_uident_list)
-# 1960               "dypgen_parser_temp.ml"
+# 1965               "dypgen_parser_temp.ml"
  as _1));Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 1963               "dypgen_parser_temp.ml"
+# 1968               "dypgen_parser_temp.ml"
  as _2)] -> Obj_uident_list 
-# 264 "dypgen_parser.dyp"
+# 263 "dypgen_parser.dyp"
 (
                        ( (fst _2)::_1 ):'dypgen__Obj_uident_list)
-# 1968               "dypgen_parser_temp.ml"
+# 1973               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1972,12 +1977,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 1976               "dypgen_parser_temp.ml"
+# 1981               "dypgen_parser_temp.ml"
  as _1)] -> Obj_ident_list 
-# 267 "dypgen_parser.dyp"
+# 266 "dypgen_parser.dyp"
 (
                        ( [(fst _1)] ):'dypgen__Obj_ident_list)
-# 1981               "dypgen_parser_temp.ml"
+# 1986               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1985,12 +1990,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 1989               "dypgen_parser_temp.ml"
+# 1994               "dypgen_parser_temp.ml"
  as _1)] -> Obj_ident_list 
-# 268 "dypgen_parser.dyp"
+# 267 "dypgen_parser.dyp"
 (
                        ( [(fst _1)] ):'dypgen__Obj_ident_list)
-# 1994               "dypgen_parser_temp.ml"
+# 1999               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -1998,15 +2003,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_ident_list ( (
 (_:'dypgen__Obj_ident_list)
-# 2002               "dypgen_parser_temp.ml"
+# 2007               "dypgen_parser_temp.ml"
  as _1));Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2005               "dypgen_parser_temp.ml"
+# 2010               "dypgen_parser_temp.ml"
  as _2)] -> Obj_ident_list 
-# 269 "dypgen_parser.dyp"
+# 268 "dypgen_parser.dyp"
 (
                       ( (fst _2)::_1 ):'dypgen__Obj_ident_list)
-# 2010               "dypgen_parser_temp.ml"
+# 2015               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2014,25 +2019,25 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_ident_list ( (
 (_:'dypgen__Obj_ident_list)
-# 2018               "dypgen_parser_temp.ml"
+# 2023               "dypgen_parser_temp.ml"
  as _1));Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2021               "dypgen_parser_temp.ml"
+# 2026               "dypgen_parser_temp.ml"
  as _2)] -> Obj_ident_list 
-# 270 "dypgen_parser.dyp"
+# 269 "dypgen_parser.dyp"
 (
                       ( (fst _2)::_1 ):'dypgen__Obj_ident_list)
-# 2026               "dypgen_parser_temp.ml"
+# 2031               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_code",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_code 
-# 273 "dypgen_parser.dyp"
+# 272 "dypgen_parser.dyp"
 (
                ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_code)
-# 2036               "dypgen_parser_temp.ml"
+# 2041               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2040,22 +2045,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2044               "dypgen_parser_temp.ml"
+# 2049               "dypgen_parser_temp.ml"
  as _1)] -> Obj_optional_code 
-# 274 "dypgen_parser.dyp"
+# 273 "dypgen_parser.dyp"
 (
                ( (fst _1,fst (snd _1)) ):'dypgen__Obj_optional_code)
-# 2049               "dypgen_parser_temp.ml"
+# 2054               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_type",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_type 
-# 277 "dypgen_parser.dyp"
+# 276 "dypgen_parser.dyp"
 (
                ( "No type" ):'dypgen__Obj_optional_type)
-# 2059               "dypgen_parser_temp.ml"
+# 2064               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2063,22 +2068,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_OCAML_TYPE  (
 (_:(string))
-# 2067               "dypgen_parser_temp.ml"
+# 2072               "dypgen_parser_temp.ml"
  as _1)] -> Obj_optional_type 
-# 278 "dypgen_parser.dyp"
+# 277 "dypgen_parser.dyp"
 (
                ( _1 ):'dypgen__Obj_optional_type)
-# 2072               "dypgen_parser_temp.ml"
+# 2077               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_mli",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_mli 
-# 281 "dypgen_parser.dyp"
+# 280 "dypgen_parser.dyp"
 (
                        ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_mli)
-# 2082               "dypgen_parser_temp.ml"
+# 2087               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2086,22 +2091,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2090               "dypgen_parser_temp.ml"
+# 2095               "dypgen_parser_temp.ml"
  as _2)] -> Obj_optional_mli 
-# 282 "dypgen_parser.dyp"
+# 281 "dypgen_parser.dyp"
 (
                        ( (fst _2,fst (snd _2)) ):'dypgen__Obj_optional_mli)
-# 2095               "dypgen_parser_temp.ml"
+# 2100               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_mlimid",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_mlimid 
-# 285 "dypgen_parser.dyp"
+# 284 "dypgen_parser.dyp"
 (
                        ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_mlimid)
-# 2105               "dypgen_parser_temp.ml"
+# 2110               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2109,22 +2114,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2113               "dypgen_parser_temp.ml"
+# 2118               "dypgen_parser_temp.ml"
  as _2)] -> Obj_optional_mlimid 
-# 286 "dypgen_parser.dyp"
+# 285 "dypgen_parser.dyp"
 (
                           ( (fst _2,fst (snd _2)) ):'dypgen__Obj_optional_mlimid)
-# 2118               "dypgen_parser_temp.ml"
+# 2123               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_mlitop",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_mlitop 
-# 289 "dypgen_parser.dyp"
+# 288 "dypgen_parser.dyp"
 (
                        ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_mlitop)
-# 2128               "dypgen_parser_temp.ml"
+# 2133               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2132,22 +2137,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2136               "dypgen_parser_temp.ml"
+# 2141               "dypgen_parser_temp.ml"
  as _2)] -> Obj_optional_mlitop 
-# 290 "dypgen_parser.dyp"
+# 289 "dypgen_parser.dyp"
 (
                           ( (fst _2,fst (snd _2)) ):'dypgen__Obj_optional_mlitop)
-# 2141               "dypgen_parser_temp.ml"
+# 2146               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("optional_mltop",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_optional_mltop 
-# 293 "dypgen_parser.dyp"
+# 292 "dypgen_parser.dyp"
 (
                        ( ("",Lexing.dummy_pos) ):'dypgen__Obj_optional_mltop)
-# 2151               "dypgen_parser_temp.ml"
+# 2156               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2155,12 +2160,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2159               "dypgen_parser_temp.ml"
+# 2164               "dypgen_parser_temp.ml"
  as _2)] -> Obj_optional_mltop 
-# 294 "dypgen_parser.dyp"
+# 293 "dypgen_parser.dyp"
 (
                          ( (fst _2,fst (snd _2)) ):'dypgen__Obj_optional_mltop)
-# 2164               "dypgen_parser_temp.ml"
+# 2169               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2168,12 +2173,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2172               "dypgen_parser_temp.ml"
+# 2177               "dypgen_parser_temp.ml"
  as _2)] -> Obj_token_list 
-# 298 "dypgen_parser.dyp"
+# 297 "dypgen_parser.dyp"
 (
                                  ( [((fst _2),"No_type")] ):'dypgen__Obj_token_list)
-# 2177               "dypgen_parser_temp.ml"
+# 2182               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2181,15 +2186,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_OCAML_TYPE  (
 (_:(string))
-# 2185               "dypgen_parser_temp.ml"
+# 2190               "dypgen_parser_temp.ml"
  as _2);Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2188               "dypgen_parser_temp.ml"
+# 2193               "dypgen_parser_temp.ml"
  as _3)] -> Obj_token_list 
-# 299 "dypgen_parser.dyp"
+# 298 "dypgen_parser.dyp"
 (
                                  ( [((fst _3),_2)] ):'dypgen__Obj_token_list)
-# 2193               "dypgen_parser_temp.ml"
+# 2198               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2197,15 +2202,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_token_list ( (
 (_:'dypgen__Obj_token_list)
-# 2201               "dypgen_parser_temp.ml"
+# 2206               "dypgen_parser_temp.ml"
  as _1));Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2204               "dypgen_parser_temp.ml"
+# 2209               "dypgen_parser_temp.ml"
  as _2)] -> Obj_token_list 
-# 300 "dypgen_parser.dyp"
+# 299 "dypgen_parser.dyp"
 (
                                  ( ((fst _2),"No_type")::_1 ):'dypgen__Obj_token_list)
-# 2209               "dypgen_parser_temp.ml"
+# 2214               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2213,28 +2218,28 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_token_list ( (
 (_:'dypgen__Obj_token_list)
-# 2217               "dypgen_parser_temp.ml"
+# 2222               "dypgen_parser_temp.ml"
  as _1));Obj_OCAML_TYPE  (
 (_:(string))
-# 2220               "dypgen_parser_temp.ml"
+# 2225               "dypgen_parser_temp.ml"
  as _2);Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2223               "dypgen_parser_temp.ml"
+# 2228               "dypgen_parser_temp.ml"
  as _3)] -> Obj_token_list 
-# 301 "dypgen_parser.dyp"
+# 300 "dypgen_parser.dyp"
 (
                                  ( ((fst _3),_2)::_1 ):'dypgen__Obj_token_list)
-# 2228               "dypgen_parser_temp.ml"
+# 2233               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("relation",[Dyp.Ter "KWD_RELATION"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_relation 
-# 304 "dypgen_parser.dyp"
+# 303 "dypgen_parser.dyp"
 (
                  ( [] ):'dypgen__Obj_relation)
-# 2238               "dypgen_parser_temp.ml"
+# 2243               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2242,15 +2247,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_relation ( (
 (_:'dypgen__Obj_relation)
-# 2246               "dypgen_parser_temp.ml"
+# 2251               "dypgen_parser_temp.ml"
  as _1));Obj_relation_list ( (
 (_:'dypgen__Obj_relation_list)
-# 2249               "dypgen_parser_temp.ml"
+# 2254               "dypgen_parser_temp.ml"
  as _2))] -> Obj_relation 
-# 305 "dypgen_parser.dyp"
+# 304 "dypgen_parser.dyp"
 (
                            ( (Rel_list (List.rev _2))::_1 ):'dypgen__Obj_relation)
-# 2254               "dypgen_parser_temp.ml"
+# 2259               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2258,15 +2263,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_relation ( (
 (_:'dypgen__Obj_relation)
-# 2262               "dypgen_parser_temp.ml"
+# 2267               "dypgen_parser_temp.ml"
  as _1));Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2265               "dypgen_parser_temp.ml"
+# 2270               "dypgen_parser_temp.ml"
  as _2)] -> Obj_relation 
-# 306 "dypgen_parser.dyp"
+# 305 "dypgen_parser.dyp"
 (
                     ( (Rel_single (fst _2))::_1 ):'dypgen__Obj_relation)
-# 2270               "dypgen_parser_temp.ml"
+# 2275               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2274,15 +2279,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2278               "dypgen_parser_temp.ml"
+# 2283               "dypgen_parser_temp.ml"
  as _1); _2;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2281               "dypgen_parser_temp.ml"
+# 2286               "dypgen_parser_temp.ml"
  as _3)] -> Obj_relation_list 
-# 309 "dypgen_parser.dyp"
+# 308 "dypgen_parser.dyp"
 (
                        ( [(fst _3);(fst _1)] ):'dypgen__Obj_relation_list)
-# 2286               "dypgen_parser_temp.ml"
+# 2291               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2290,15 +2295,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_relation_list ( (
 (_:'dypgen__Obj_relation_list)
-# 2294               "dypgen_parser_temp.ml"
+# 2299               "dypgen_parser_temp.ml"
  as _1)); _2;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2297               "dypgen_parser_temp.ml"
+# 2302               "dypgen_parser_temp.ml"
  as _3)] -> Obj_relation_list 
-# 310 "dypgen_parser.dyp"
+# 309 "dypgen_parser.dyp"
 (
                               ( (fst _3)::_1 ):'dypgen__Obj_relation_list)
-# 2302               "dypgen_parser_temp.ml"
+# 2307               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2306,15 +2311,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_grammar ( (
 (_:'dypgen__Obj_grammar)
-# 2310               "dypgen_parser_temp.ml"
+# 2315               "dypgen_parser_temp.ml"
  as _1));Obj_entry_def ( (
 (_:'dypgen__Obj_entry_def)
-# 2313               "dypgen_parser_temp.ml"
+# 2318               "dypgen_parser_temp.ml"
  as _2))] -> Obj_grammar 
-# 313 "dypgen_parser.dyp"
+# 312 "dypgen_parser.dyp"
 (
                       ( _2@_1 ):'dypgen__Obj_grammar)
-# 2318               "dypgen_parser_temp.ml"
+# 2323               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2322,15 +2327,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_entry_def ( (
 (_:'dypgen__Obj_entry_def)
-# 2326               "dypgen_parser_temp.ml"
+# 2331               "dypgen_parser_temp.ml"
  as _1));Obj_dypgen__option_SEMI ( (
 (_:'dypgen__Obj_dypgen__option_SEMI)
-# 2329               "dypgen_parser_temp.ml"
+# 2334               "dypgen_parser_temp.ml"
  as _2))] -> Obj_grammar 
-# 314 "dypgen_parser.dyp"
+# 313 "dypgen_parser.dyp"
 (
                      ( _1 ):'dypgen__Obj_grammar)
-# 2334               "dypgen_parser_temp.ml"
+# 2339               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2339,7 +2344,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_dypgen__option_SEMI 
 (
 (None):'dypgen__Obj_dypgen__option_SEMI)
-# 2343               "dypgen_parser_temp.ml"
+# 2348               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2348,35 +2353,35 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_dypgen__option_SEMI 
 (
 (None):'dypgen__Obj_dypgen__option_SEMI)
-# 2352               "dypgen_parser_temp.ml"
+# 2357               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("entry_def",[Dyp.Ter "LIDENT";Dyp.Non_ter ("opt_pattern",Dyp.No_priority );Dyp.Ter "COLON";Dyp.Non_ter ("dypgen__option_BAR",Dyp.No_priority );Dyp.Non_ter ("rhs_list",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 318 "dypgen_parser.dyp"
+# 317 "dypgen_parser.dyp"
         (lhs,_:(string * (int * int * int * string)))
-# 2361               "dypgen_parser_temp.ml"
+# 2366               "dypgen_parser_temp.ml"
  as _1);Obj_opt_pattern ( (
-# 318 "dypgen_parser.dyp"
+# 317 "dypgen_parser.dyp"
                             (pat_code, pat_pos:'dypgen__Obj_opt_pattern)
-# 2365               "dypgen_parser_temp.ml"
+# 2370               "dypgen_parser_temp.ml"
  as _2)); _3;Obj_dypgen__option_BAR ( (
 (_:'dypgen__Obj_dypgen__option_BAR)
-# 2368               "dypgen_parser_temp.ml"
+# 2373               "dypgen_parser_temp.ml"
  as _4));Obj_rhs_list ( (
 (_:'dypgen__Obj_rhs_list)
-# 2371               "dypgen_parser_temp.ml"
+# 2376               "dypgen_parser_temp.ml"
  as _5))] -> Obj_entry_def 
-# 318 "dypgen_parser.dyp"
+# 317 "dypgen_parser.dyp"
 (
   ( let f (rl1,rl2) (prio,symbl,code,rule_options,add_rules) =
       ((lhs, [pat_code, (Pat_inh lhs), pat_pos]), prio, symbl, code, rule_options)
        ::rl1,add_rules@rl2 in
     let rl1, rl2 = List.fold_left f ([], []) (List.rev _5) in
     rl2@rl1 ):'dypgen__Obj_entry_def)
-# 2380               "dypgen_parser_temp.ml"
+# 2385               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2384,12 +2389,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_rhs ( (
 (_:'dypgen__Obj_rhs)
-# 2388               "dypgen_parser_temp.ml"
+# 2393               "dypgen_parser_temp.ml"
  as _1))] -> Obj_rhs_list 
-# 325 "dypgen_parser.dyp"
+# 324 "dypgen_parser.dyp"
 (
         ( [_1] ):'dypgen__Obj_rhs_list)
-# 2393               "dypgen_parser_temp.ml"
+# 2398               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2397,15 +2402,15 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_rhs_list ( (
 (_:'dypgen__Obj_rhs_list)
-# 2401               "dypgen_parser_temp.ml"
+# 2406               "dypgen_parser_temp.ml"
  as _1)); _2;Obj_rhs ( (
 (_:'dypgen__Obj_rhs)
-# 2404               "dypgen_parser_temp.ml"
+# 2409               "dypgen_parser_temp.ml"
  as _3))] -> Obj_rhs_list 
-# 326 "dypgen_parser.dyp"
+# 325 "dypgen_parser.dyp"
 (
                      ( _3::_1 ):'dypgen__Obj_rhs_list)
-# 2409               "dypgen_parser_temp.ml"
+# 2414               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2413,19 +2418,19 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_opt_bang ( (
 (_:'dypgen__Obj_opt_bang)
-# 2417               "dypgen_parser_temp.ml"
+# 2422               "dypgen_parser_temp.ml"
  as _1));Obj_symbol_list ( (
 (_:'dypgen__Obj_symbol_list)
-# 2420               "dypgen_parser_temp.ml"
+# 2425               "dypgen_parser_temp.ml"
  as _2));Obj_opt_dash ( (
 (_:'dypgen__Obj_opt_dash)
-# 2423               "dypgen_parser_temp.ml"
+# 2428               "dypgen_parser_temp.ml"
  as _3));Obj_action_prio ( (
-# 329 "dypgen_parser.dyp"
+# 328 "dypgen_parser.dyp"
                                               (action, prio, b:'dypgen__Obj_action_prio)
-# 2427               "dypgen_parser_temp.ml"
+# 2432               "dypgen_parser_temp.ml"
  as _4))] -> Obj_rhs 
-# 329 "dypgen_parser.dyp"
+# 328 "dypgen_parser.dyp"
 (
     ( let symbl, additional_rules = _2 in
       let action =
@@ -2436,47 +2441,47 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
         else action
       in
       (prio, (List.rev symbl), action, (_1,_3), additional_rules) ):'dypgen__Obj_rhs)
-# 2440               "dypgen_parser_temp.ml"
+# 2445               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_bang",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_opt_bang 
-# 340 "dypgen_parser.dyp"
+# 339 "dypgen_parser.dyp"
 (
     ( true ):'dypgen__Obj_opt_bang)
-# 2450               "dypgen_parser_temp.ml"
+# 2455               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_bang",[Dyp.Ter "BANG"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_opt_bang 
-# 341 "dypgen_parser.dyp"
+# 340 "dypgen_parser.dyp"
 (
          ( false ):'dypgen__Obj_opt_bang)
-# 2460               "dypgen_parser_temp.ml"
+# 2465               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_dash",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_opt_dash 
-# 344 "dypgen_parser.dyp"
+# 343 "dypgen_parser.dyp"
 (
     ( true ):'dypgen__Obj_opt_dash)
-# 2470               "dypgen_parser_temp.ml"
+# 2475               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_dash",[Dyp.Ter "DASH"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1] -> Obj_opt_dash 
-# 345 "dypgen_parser.dyp"
+# 344 "dypgen_parser.dyp"
 (
          ( false ):'dypgen__Obj_opt_dash)
-# 2480               "dypgen_parser_temp.ml"
+# 2485               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2484,77 +2489,77 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2488               "dypgen_parser_temp.ml"
+# 2493               "dypgen_parser_temp.ml"
  as _1);Obj_priority ( (
 (_:'dypgen__Obj_priority)
-# 2491               "dypgen_parser_temp.ml"
+# 2496               "dypgen_parser_temp.ml"
  as _2))] -> Obj_action_prio 
-# 348 "dypgen_parser.dyp"
+# 347 "dypgen_parser.dyp"
 (
                         ( (_1,_2,false) ):'dypgen__Obj_action_prio)
-# 2496               "dypgen_parser_temp.ml"
+# 2501               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("action_prio",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_action_prio 
-# 349 "dypgen_parser.dyp"
+# 348 "dypgen_parser.dyp"
 (
        ( ("", (Lexing.dummy_pos,false)),
        ("default_priority", (-1,-1,-1,"")), true ):'dypgen__Obj_action_prio)
-# 2507               "dypgen_parser_temp.ml"
+# 2512               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symbol_list",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_symbol_list 
-# 353 "dypgen_parser.dyp"
+# 352 "dypgen_parser.dyp"
 (
           ( ([],[]) ):'dypgen__Obj_symbol_list)
-# 2517               "dypgen_parser_temp.ml"
+# 2522               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symbol_list",[Dyp.Non_ter ("symbol_list",Dyp.No_priority );Dyp.Non_ter ("dypgen__nested_nt_11",Dyp.No_priority );Dyp.Non_ter ("opt_pattern",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symbol_list ( (
-# 355 "dypgen_parser.dyp"
+# 354 "dypgen_parser.dyp"
                 (l, add_rule:'dypgen__Obj_symbol_list)
-# 2526               "dypgen_parser_temp.ml"
+# 2531               "dypgen_parser_temp.ml"
  as _1));Obj_dypgen__nested_nt_11 ( (
-# 356 "dypgen_parser.dyp"
+# 355 "dypgen_parser.dyp"
                                                                            (symb:'dypgen__Obj_dypgen__nested_nt_11)
-# 2530               "dypgen_parser_temp.ml"
+# 2535               "dypgen_parser_temp.ml"
  as _2));Obj_opt_pattern ( (
-# 357 "dypgen_parser.dyp"
+# 356 "dypgen_parser.dyp"
                 (pat_code, pat_pos:'dypgen__Obj_opt_pattern)
-# 2534               "dypgen_parser_temp.ml"
+# 2539               "dypgen_parser_temp.ml"
  as _3))] -> Obj_symbol_list 
-# 357 "dypgen_parser.dyp"
+# 356 "dypgen_parser.dyp"
 (
       ( use_dyplex := true;
       ((symb, (pat_code, (Pat_syn "#Lexeme_matched"), pat_pos))::l), add_rule ):'dypgen__Obj_symbol_list)
-# 2540               "dypgen_parser_temp.ml"
+# 2545               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symbol_list",[Dyp.Non_ter ("symbol_list",Dyp.No_priority );Dyp.Ter "THREEDOTS";Dyp.Ter "OCAML_CODE";Dyp.Non_ter ("opt_pattern",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symbol_list ( (
-# 361 "dypgen_parser.dyp"
+# 360 "dypgen_parser.dyp"
                 (l, add_rule:'dypgen__Obj_symbol_list)
-# 2549               "dypgen_parser_temp.ml"
+# 2554               "dypgen_parser_temp.ml"
  as _1)); _2;Obj_OCAML_CODE  (
 (_:(string * (Lexing.position * bool)))
-# 2552               "dypgen_parser_temp.ml"
+# 2557               "dypgen_parser_temp.ml"
  as _3);Obj_opt_pattern ( (
-# 362 "dypgen_parser.dyp"
+# 361 "dypgen_parser.dyp"
                                      (pat_code, pat_pos:'dypgen__Obj_opt_pattern)
-# 2556               "dypgen_parser_temp.ml"
+# 2561               "dypgen_parser_temp.ml"
  as _4))] -> Obj_symbol_list 
-# 362 "dypgen_parser.dyp"
+# 361 "dypgen_parser.dyp"
 (
       (
       (*let count = dyp.global_data.gd_count in
@@ -2569,26 +2574,26 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
       let symb = Symb_early_action _3 in
       ((symb, (pat_code, (Pat_syn ""), pat_pos))::l), add_rule
       ):'dypgen__Obj_symbol_list)
-# 2573               "dypgen_parser_temp.ml"
+# 2578               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symbol_list",[Dyp.Non_ter ("symbol_list",Dyp.No_priority );Dyp.Non_ter ("symbol",Dyp.No_priority );Dyp.Non_ter ("opt_pattern",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symbol_list ( (
-# 376 "dypgen_parser.dyp"
+# 375 "dypgen_parser.dyp"
                 (l, rules1:'dypgen__Obj_symbol_list)
-# 2582               "dypgen_parser_temp.ml"
+# 2587               "dypgen_parser_temp.ml"
  as _1));Obj_symbol ( (
-# 376 "dypgen_parser.dyp"
+# 375 "dypgen_parser.dyp"
                                    (symb, rules2:'dypgen__Obj_symbol)
-# 2586               "dypgen_parser_temp.ml"
+# 2591               "dypgen_parser_temp.ml"
  as _2));Obj_opt_pattern ( (
-# 376 "dypgen_parser.dyp"
+# 375 "dypgen_parser.dyp"
                                                               (pat_code, pat_pos:'dypgen__Obj_opt_pattern)
-# 2590               "dypgen_parser_temp.ml"
+# 2595               "dypgen_parser_temp.ml"
  as _3))] -> Obj_symbol_list 
-# 376 "dypgen_parser.dyp"
+# 375 "dypgen_parser.dyp"
 (
       ( let pat_typ = match symb with
           | Symb_terminal (s,_)
@@ -2606,7 +2611,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
           with Invalid_argument _ -> pat_code
         in
         ( ((symb, (pat_code, (Pat_syn pat_typ), pat_pos))::l), rules2@rules1 ) ):'dypgen__Obj_symbol_list)
-# 2610               "dypgen_parser_temp.ml"
+# 2615               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2614,12 +2619,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_regexp_ter ( (
 (_:'dypgen__Obj_regexp_ter)
-# 2618               "dypgen_parser_temp.ml"
+# 2623               "dypgen_parser_temp.ml"
  as _1))] -> Obj_dypgen__nested_nt_11 
-# 355 "dypgen_parser.dyp"
+# 354 "dypgen_parser.dyp"
 (
                 ( Symb_regexp _1 ):'dypgen__Obj_dypgen__nested_nt_11)
-# 2623               "dypgen_parser_temp.ml"
+# 2628               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2627,12 +2632,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_regexp_ter ( (
 (_:'dypgen__Obj_regexp_ter)
-# 2631               "dypgen_parser_temp.ml"
+# 2636               "dypgen_parser_temp.ml"
  as _2))] -> Obj_dypgen__nested_nt_11 
-# 355 "dypgen_parser.dyp"
+# 354 "dypgen_parser.dyp"
 (
                                                      ( Symb_regexp_NL _2 ):'dypgen__Obj_dypgen__nested_nt_11)
-# 2636               "dypgen_parser_temp.ml"
+# 2641               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2640,12 +2645,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symb ( (
 (_:'dypgen__Obj_symb)
-# 2644               "dypgen_parser_temp.ml"
+# 2649               "dypgen_parser_temp.ml"
  as _1))] -> Obj_symbol 
-# 394 "dypgen_parser.dyp"
+# 393 "dypgen_parser.dyp"
 (
          ( _1 ):'dypgen__Obj_symbol)
-# 2649               "dypgen_parser_temp.ml"
+# 2654               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2653,12 +2658,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symb ( (
 (_:'dypgen__Obj_symb)
-# 2657               "dypgen_parser_temp.ml"
+# 2662               "dypgen_parser_temp.ml"
  as _1)); _2] ->  let res = 
-# 395 "dypgen_parser.dyp"
+# 394 "dypgen_parser.dyp"
 (
               ( symbol_list dyp "star" _1 ):'dypgen__Obj_symbol * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 2662               "dypgen_parser_temp.ml"
+# 2667               "dypgen_parser_temp.ml"
   in Obj_symbol(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -2667,12 +2672,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symb ( (
 (_:'dypgen__Obj_symb)
-# 2671               "dypgen_parser_temp.ml"
+# 2676               "dypgen_parser_temp.ml"
  as _1)); _2] ->  let res = 
-# 396 "dypgen_parser.dyp"
+# 395 "dypgen_parser.dyp"
 (
               ( symbol_list dyp "plus" _1 ):'dypgen__Obj_symbol * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 2676               "dypgen_parser_temp.ml"
+# 2681               "dypgen_parser_temp.ml"
   in Obj_symbol(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -2680,13 +2685,13 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (("symbol",[Dyp.Non_ter ("symb",Dyp.No_priority );Dyp.Ter "QUESTION"],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_symb ( (
-# 398 "dypgen_parser.dyp"
+# 397 "dypgen_parser.dyp"
         (symb,add_rules:'dypgen__Obj_symb)
-# 2686               "dypgen_parser_temp.ml"
+# 2691               "dypgen_parser_temp.ml"
  as _1)); _2] ->  let res = 
-# 398 "dypgen_parser.dyp"
+# 397 "dypgen_parser.dyp"
 (
-    ( let {gd_count=count; gd_symbs=symbs} = dyp.global_data in
+    ( let {gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
       let pat_typ = match symb with
         | Symb_non_terminal ((s,_),_,_,_)
         | Symb_non_terminal_NL ((s,_),_,_,_) -> s
@@ -2728,7 +2733,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
       (rule1::rule2::add_rules)),
       [Dyp.Global_data {dyp.global_data with gd_count=count;
         gd_symbs=symbs}] ):'dypgen__Obj_symbol * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 2732               "dypgen_parser_temp.ml"
+# 2737               "dypgen_parser_temp.ml"
   in Obj_symbol(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -2737,18 +2742,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2741               "dypgen_parser_temp.ml"
+# 2746               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2744               "dypgen_parser_temp.ml"
+# 2749               "dypgen_parser_temp.ml"
  as _2)); _3; _4;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2747               "dypgen_parser_temp.ml"
+# 2752               "dypgen_parser_temp.ml"
  as _5); _6] -> Obj_symb 
-# 443 "dypgen_parser.dyp"
+# 442 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal (_1,_5,Pr_eq,_2)),[] ):'dypgen__Obj_symb)
-# 2752               "dypgen_parser_temp.ml"
+# 2757               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2756,18 +2761,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2760               "dypgen_parser_temp.ml"
+# 2765               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2763               "dypgen_parser_temp.ml"
+# 2768               "dypgen_parser_temp.ml"
  as _2)); _3; _4;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2766               "dypgen_parser_temp.ml"
+# 2771               "dypgen_parser_temp.ml"
  as _5); _6] -> Obj_symb 
-# 445 "dypgen_parser.dyp"
+# 444 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal (_1,_5,Pr_lesseq,_2)),[] ):'dypgen__Obj_symb)
-# 2771               "dypgen_parser_temp.ml"
+# 2776               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2775,18 +2780,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2779               "dypgen_parser_temp.ml"
+# 2784               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2782               "dypgen_parser_temp.ml"
+# 2787               "dypgen_parser_temp.ml"
  as _2)); _3;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2785               "dypgen_parser_temp.ml"
+# 2790               "dypgen_parser_temp.ml"
  as _4); _5] -> Obj_symb 
-# 447 "dypgen_parser.dyp"
+# 446 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal (_1,_4,Pr_less,_2)),[] ):'dypgen__Obj_symb)
-# 2790               "dypgen_parser_temp.ml"
+# 2795               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2794,18 +2799,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2798               "dypgen_parser_temp.ml"
+# 2803               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2801               "dypgen_parser_temp.ml"
+# 2806               "dypgen_parser_temp.ml"
  as _2)); _3; _4;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2804               "dypgen_parser_temp.ml"
+# 2809               "dypgen_parser_temp.ml"
  as _5); _6] -> Obj_symb 
-# 449 "dypgen_parser.dyp"
+# 448 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal (_1,_5,Pr_greatereq,_2)),[] ):'dypgen__Obj_symb)
-# 2809               "dypgen_parser_temp.ml"
+# 2814               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2813,39 +2818,39 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2817               "dypgen_parser_temp.ml"
+# 2822               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2820               "dypgen_parser_temp.ml"
+# 2825               "dypgen_parser_temp.ml"
  as _2)); _3;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2823               "dypgen_parser_temp.ml"
+# 2828               "dypgen_parser_temp.ml"
  as _4); _5] -> Obj_symb 
-# 451 "dypgen_parser.dyp"
+# 450 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal (_1,_4,Pr_greater,_2)),[] ):'dypgen__Obj_symb)
-# 2828               "dypgen_parser_temp.ml"
+# 2833               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symb",[Dyp.Ter "LIDENT";Dyp.Non_ter ("optional_code",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
-# 453 "dypgen_parser.dyp"
+# 452 "dypgen_parser.dyp"
           (n,_:(string * (int * int * int * string)))
-# 2837               "dypgen_parser_temp.ml"
+# 2842               "dypgen_parser_temp.ml"
  as _1);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2840               "dypgen_parser_temp.ml"
+# 2845               "dypgen_parser_temp.ml"
  as _2))] -> Obj_symb 
-# 452 "dypgen_parser.dyp"
+# 451 "dypgen_parser.dyp"
 (
                               (
       if String_set.mem n dyp.global_data.gd_regexp_decl
       then raise Giveup else
       (Symb_non_terminal
       ((n,dummy_p),("No_priority",dummy_p),Pr_eq,_2)), [] ):'dypgen__Obj_symb)
-# 2849               "dypgen_parser_temp.ml"
+# 2854               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2853,12 +2858,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2857               "dypgen_parser_temp.ml"
+# 2862               "dypgen_parser_temp.ml"
  as _1)] -> Obj_symb 
-# 457 "dypgen_parser.dyp"
+# 456 "dypgen_parser.dyp"
 (
            ( (Symb_terminal _1),[] ):'dypgen__Obj_symb)
-# 2862               "dypgen_parser_temp.ml"
+# 2867               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2866,18 +2871,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2870               "dypgen_parser_temp.ml"
+# 2875               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2873               "dypgen_parser_temp.ml"
+# 2878               "dypgen_parser_temp.ml"
  as _3)); _4; _5;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2876               "dypgen_parser_temp.ml"
+# 2881               "dypgen_parser_temp.ml"
  as _6); _7] -> Obj_symb 
-# 459 "dypgen_parser.dyp"
+# 458 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal_NL (_2,_6,Pr_eq,_3)),[] ):'dypgen__Obj_symb)
-# 2881               "dypgen_parser_temp.ml"
+# 2886               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2885,18 +2890,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2889               "dypgen_parser_temp.ml"
+# 2894               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2892               "dypgen_parser_temp.ml"
+# 2897               "dypgen_parser_temp.ml"
  as _3)); _4; _5;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2895               "dypgen_parser_temp.ml"
+# 2900               "dypgen_parser_temp.ml"
  as _6); _7] -> Obj_symb 
-# 461 "dypgen_parser.dyp"
+# 460 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal_NL (_2,_6,Pr_lesseq,_3)),[] ):'dypgen__Obj_symb)
-# 2900               "dypgen_parser_temp.ml"
+# 2905               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2904,18 +2909,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2908               "dypgen_parser_temp.ml"
+# 2913               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2911               "dypgen_parser_temp.ml"
+# 2916               "dypgen_parser_temp.ml"
  as _3)); _4;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2914               "dypgen_parser_temp.ml"
+# 2919               "dypgen_parser_temp.ml"
  as _5); _6] -> Obj_symb 
-# 463 "dypgen_parser.dyp"
+# 462 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal_NL (_2,_5,Pr_less,_3)),[] ):'dypgen__Obj_symb)
-# 2919               "dypgen_parser_temp.ml"
+# 2924               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2923,18 +2928,18 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2927               "dypgen_parser_temp.ml"
+# 2932               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2930               "dypgen_parser_temp.ml"
+# 2935               "dypgen_parser_temp.ml"
  as _3)); _4; _5;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2933               "dypgen_parser_temp.ml"
+# 2938               "dypgen_parser_temp.ml"
  as _6); _7] -> Obj_symb 
-# 465 "dypgen_parser.dyp"
+# 464 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal_NL (_2,_6,Pr_greatereq,_3)),[] ):'dypgen__Obj_symb)
-# 2938               "dypgen_parser_temp.ml"
+# 2943               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2942,37 +2947,37 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2946               "dypgen_parser_temp.ml"
+# 2951               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2949               "dypgen_parser_temp.ml"
+# 2954               "dypgen_parser_temp.ml"
  as _3)); _4;Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 2952               "dypgen_parser_temp.ml"
+# 2957               "dypgen_parser_temp.ml"
  as _5); _6] -> Obj_symb 
-# 467 "dypgen_parser.dyp"
+# 466 "dypgen_parser.dyp"
 (
       ( (Symb_non_terminal_NL (_2,_5,Pr_greater,_3)),[] ):'dypgen__Obj_symb)
-# 2957               "dypgen_parser_temp.ml"
+# 2962               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("symb",[Dyp.Ter "DASH";Dyp.Ter "LIDENT";Dyp.Non_ter ("optional_code",Dyp.No_priority )],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_LIDENT  (
-# 469 "dypgen_parser.dyp"
+# 468 "dypgen_parser.dyp"
                (n,_:(string * (int * int * int * string)))
-# 2966               "dypgen_parser_temp.ml"
+# 2971               "dypgen_parser_temp.ml"
  as _2);Obj_optional_code ( (
 (_:'dypgen__Obj_optional_code)
-# 2969               "dypgen_parser_temp.ml"
+# 2974               "dypgen_parser_temp.ml"
  as _3))] -> Obj_symb 
-# 468 "dypgen_parser.dyp"
+# 467 "dypgen_parser.dyp"
 (
                                    (
       (Symb_non_terminal_NL
       ((n,dummy_p),("No_priority",dummy_p),Pr_eq,_3)), [] ):'dypgen__Obj_symb)
-# 2976               "dypgen_parser_temp.ml"
+# 2981               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2980,12 +2985,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_UIDENT  (
 (_:(string * (int * int * int * string)))
-# 2984               "dypgen_parser_temp.ml"
+# 2989               "dypgen_parser_temp.ml"
  as _2)] -> Obj_symb 
-# 471 "dypgen_parser.dyp"
+# 470 "dypgen_parser.dyp"
 (
                 ( (Symb_terminal_NL _2),[] ):'dypgen__Obj_symb)
-# 2989               "dypgen_parser_temp.ml"
+# 2994               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -2993,11 +2998,11 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [ _1;Obj_rhs_list ( (
 (_:'dypgen__Obj_rhs_list)
-# 2997               "dypgen_parser_temp.ml"
+# 3002               "dypgen_parser_temp.ml"
  as _2)); _3] ->  let res = 
-# 473 "dypgen_parser.dyp"
+# 472 "dypgen_parser.dyp"
 (
-    ( let { gd_count=count; gd_symbs=symbs} = dyp.global_data in
+    ( let { gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
       let nt = "dypgen__nested_nt_"^(string_of_int count) in
       let f (rl1,rl2) (prio,symbl,code,allow_layout,add_rules) =
         ((nt,[dummy_pat_inh]),prio,symbl,code,allow_layout)::rl1,add_rules@rl2
@@ -3007,7 +3012,7 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
         ((nt,dummy_p),("No_priority",dummy_p),Pr_eq,dummy_code)), rl2@rl1),
       [Dyp.Global_data
         {dyp.global_data with gd_count=count+1; gd_symbs=symbs}] ):'dypgen__Obj_symb * ('t,'obj,'gd,'ld,'l) Dyp.dyp_action list)
-# 3011               "dypgen_parser_temp.ml"
+# 3016               "dypgen_parser_temp.ml"
   in Obj_symb(fst res), snd res
  | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
@@ -3015,10 +3020,10 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 (("priority",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_priority 
-# 485 "dypgen_parser.dyp"
+# 484 "dypgen_parser.dyp"
 (
           ( ("default_priority",(-1,-1,-1,"")) ):'dypgen__Obj_priority)
-# 3022               "dypgen_parser_temp.ml"
+# 3027               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -3026,22 +3031,22 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_LIDENT  (
 (_:(string * (int * int * int * string)))
-# 3030               "dypgen_parser_temp.ml"
+# 3035               "dypgen_parser_temp.ml"
  as _1)] -> Obj_priority 
-# 486 "dypgen_parser.dyp"
+# 485 "dypgen_parser.dyp"
 (
            ( _1 ):'dypgen__Obj_priority)
-# 3035               "dypgen_parser_temp.ml"
+# 3040               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
 (("opt_pattern",[],"default_priority",[]),
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [] -> Obj_opt_pattern 
-# 495 "dypgen_parser.dyp"
+# 494 "dypgen_parser.dyp"
 (
            ( ("_",Lexing.dummy_pos) ):'dypgen__Obj_opt_pattern)
-# 3045               "dypgen_parser_temp.ml"
+# 3050               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])
 ;
@@ -3049,12 +3054,12 @@ Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypg
 Dyp.Dypgen_action (fun __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl ->
 (Dyp.Tools.transform_action (fun dyp __dypgen_av_list -> (match (__dypgen_av_list) with [Obj_PATTERN  (
 (_:(string * Lexing.position))
-# 3053               "dypgen_parser_temp.ml"
+# 3058               "dypgen_parser_temp.ml"
  as _1)] -> Obj_opt_pattern 
-# 496 "dypgen_parser.dyp"
+# 495 "dypgen_parser.dyp"
 (
             ( _1 ):'dypgen__Obj_opt_pattern)
-# 3058               "dypgen_parser_temp.ml"
+# 3063               "dypgen_parser_temp.ml"
 ,[] | _ -> raise Dyp.Giveup))) __dypgen_ol __dypgen_pos __dypgen_posl __dypgen_gd __dypgen_ld __dypgen_lld __dypgen_di __dypgen_p __dypgen_nl),
 [])],
 

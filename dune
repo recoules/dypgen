@@ -1,7 +1,7 @@
 (install
  (files dyp2gram.pl)
  (section bin)
- (package dyp))
+ (package dypgen))
 
 (rule
  (alias parser)

@@ -1,5 +1,4 @@
 {
-open Lexing
 
 module Ordered_string =
 struct

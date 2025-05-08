@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name sharp)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets sharp_parser.mli sharp_parser.ml)

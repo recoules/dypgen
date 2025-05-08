@@ -3,7 +3,7 @@
  (promote (until-clean))
  (name tinyML)
  (libraries ulex dyp)
- (flags -w -27-32 -rectypes)
+ (flags :standard -w -27-32 -rectypes)
  (preprocess
   (per_module
    ((action

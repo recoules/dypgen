@@ -238,8 +238,8 @@ let grammar, max_eps =
   let aux ra =
     let lhs, p, symb_list, action, ro = ra in
     if not (List.exists (function
-      | (Symb_non_terminal ((nt,_),_,_,inh)), _
-      | (Symb_non_terminal_NL ((nt,_),_,_,inh)), _
+      | (Symb_non_terminal ((_,_),_,_,inh)), _
+      | (Symb_non_terminal_NL ((_,_),_,_,inh)), _
       when inh <> ("",Lexing.dummy_pos) -> true
       | (Symb_early_action _), _ -> true | _ -> false) symb_list)
     then ra else
@@ -489,7 +489,7 @@ let nt_par_set =
           String_map.add nt (pos, b) ntpm)
     | _ -> ntpm
   in
-  let aux2 ntpm ((lhs_nt,_),_,ld_list,_,_) =
+  let aux2 ntpm ((_,_),_,ld_list,_,_) =
     List.fold_left aux1 ntpm ld_list
   in
   let nt_par_map =
@@ -585,8 +585,8 @@ let grammar, nt_par_set =
 let non_terminal_map, non_terminal_set =
   let non_terminal_set =
     let aux1 st_set ld = match ld with
-      | (Symb_non_terminal ((nt,pos),_,_,inh)),_
-      | (Symb_non_terminal_NL ((nt,pos),_,_,inh)),_ ->
+      | (Symb_non_terminal ((nt,_),_,_,_)),_
+      | (Symb_non_terminal_NL ((nt,_),_,_,_)),_ ->
           String_set.add nt st_set
       | _ -> st_set
     in
@@ -1147,8 +1147,8 @@ let code_parser =
     
     let code_var_list, code_inherited_val =
       let f (code_vl, code_iv, n, n') = function
-        | (Symb_regexp _), (pat, (Pat_syn pat_typ), pos)
-        | (Symb_regexp_NL _), (pat, (Pat_syn pat_typ), pos) ->
+        | (Symb_regexp _), (pat, (Pat_syn _), pos)
+        | (Symb_regexp_NL _), (pat, (Pat_syn _), pos) ->
             if pat = "_" then
               (" "^obj_pref^"Lexeme_matched _"^(string_of_int n))::code_vl,
               code_iv, n+1, n'+1
@@ -1181,9 +1181,9 @@ let code_parser =
               insert_line_number^" as _"^(string_of_int n)^")")::code_vl,
               code_iv, n+1, n'+1
         | (Symb_non_terminal ((nt,_),_,_,(code, code_pos))),
-            (pat, (Pat_syn pat_typ), pos)
+            (pat, (Pat_syn _), pos)
         | (Symb_non_terminal_NL ((nt,_),_,_,(code, code_pos))),
-            (pat, (Pat_syn pat_typ), pos)
+            (pat, (Pat_syn _), pos)
           when nt.[0] <> '0' ->
             let code_var = (*aux "" n patternl in*)
               " ("^(sharp_line_number pos.pos_fname pos.pos_lnum)^

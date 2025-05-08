@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name local_data)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets local_data_parser.mli local_data_parser.ml)

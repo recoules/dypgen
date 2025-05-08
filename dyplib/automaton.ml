@@ -84,7 +84,7 @@ module Int_map = Map.Make(Ordered_int)
 type lhs = non_ter * priority * int
 type lit_nt = non_ter * (priority nt_prio)
 let ind_of_lhs (_, _, i) = i
-let str_lhs (nt, _, i) str_non_ter = str_non_ter.(nt)
+let str_lhs (nt, _, _) str_non_ter = str_non_ter.(nt)
 
 
 type literal = (lit_nt, int) psymbol
@@ -379,7 +379,6 @@ struct
      ((state Map_is.t) array * (state Map_is.t) array)
   type array_nt_prio = int Prio_map.t array
 end
-open Dyp_special_types
 
 type nt_cons_map = int String_map.t
 
@@ -609,7 +608,7 @@ let rec str_tok_list ll str_non_ter str_ter regexp_array = match ll with
 
 
 let str_state_succ succ_states str_non_ter str_ter =
-  let f str (state,prio) =
+  let f str (state,_) =
     str^" ["^(string_of_int state.number)^","^
     (str_literal_trans state.li str_non_ter str_ter)^"]"
   in
@@ -638,7 +637,7 @@ let print_item_set chan is gram_rhs lhs_table str_non_ter str_ter regexp_array =
 
 let str_predict predict str_non_ter =
   Predict.fold
-  (fun (nt,p) str ->
+  (fun (nt,_) str ->
     str^(Printf.sprintf "(%s:%d)" str_non_ter.(nt) nt))
   predict ""
 
@@ -683,10 +682,11 @@ let print_map m gram_rhs lhs_table str_non_ter str_ter regexp_array =
 
 let countst = ref 0
 (** This ref counts the number of state creations. *)
+
 let count_trans = ref 0
 (** This ref counts the number of transitions between states. *)
 
-let closure_v0_LR0 (is:item_set) gram_rhs gram_lhs nt_to_add non_kernel_array =
+let closure_v0_LR0 (is:item_set) _ gram_lhs nt_to_add non_kernel_array =
   let g nk rn =
     if non_kernel_array.(rn) then nk
     else (non_kernel_array.(rn) <- true; rn::nk)
@@ -932,7 +932,7 @@ let succ_states_count = ref 0
 
 (* FIXME array_lhs is still not used, it should be used to avoid calling
 Int_set.add too many times in f1. Then we could give up the Int_set for a list.*)
-let move_LR0 s is_trace gram_rhs gram_lhs (gram_parnt:(int*int) list array) bnt_array r_L (*prio_dat array_nt_prio lhslists*) array_lt_ter array_lt_ter_nl array_lt_nt array_lt_nt_nl (*splitting_ter splitting_nt*) array_lhs succ_states_array non_kernel_array =
+let move_LR0 s is_trace gram_rhs gram_lhs (gram_parnt:(int*int) list array) _ r_L (*prio_dat array_nt_prio lhslists*) array_lt_ter array_lt_ter_nl array_lt_nt array_lt_nt_nl (*splitting_ter splitting_nt*) _ succ_states_array non_kernel_array =
   (*output_string !log_channel "move_LR0 called\n";*)
   
   let (is_trace_tok, is_trace_tok_nl), (is_trace_nt, is_trace_nt_nl) =
@@ -973,7 +973,7 @@ let move_LR0 s is_trace gram_rhs gram_lhs (gram_parnt:(int*int) list array) bnt_
       match rhs.(dp+1) with
         | Ps_Ter _ | Ps_Ter_NL _ ->
             (fun is -> is.kernel_t <- Intc_set.add (rn, dp+1) is.kernel_t)
-        | Ps_Non_ter nt | Ps_Non_ter_NL nt ->
+        | Ps_Non_ter _ | Ps_Non_ter_NL _ ->
             (fun is -> (is.kernel_nt <- Intc_set.add (rn, dp+1) is.kernel_nt)))
       is_list;
     lt_list, nl_list
@@ -1074,7 +1074,7 @@ let merge_non_kernel nk1 nk2 non_kernel_array =
 
 
 
-let map_succ gram_rhs gram_lhs gram_parnt bnt_array lhs_table (*nt_of_ind prio_of_ind*) str_non_ter str_ter regexp_array r_L (*prio_dat array_nt_prio lhslists*) array_lt_ter array_lt_ter_nl array_lt_nt array_lt_nt_nl array_lhs succ_states_array non_kernel_array is_trace_state_list vl =
+let map_succ gram_rhs gram_lhs gram_parnt bnt_array _ (*nt_of_ind prio_of_ind*) _ _ _ r_L (*prio_dat array_nt_prio lhslists*) array_lt_ter array_lt_ter_nl array_lt_nt array_lt_nt_nl array_lhs succ_states_array non_kernel_array is_trace_state_list vl =
   let rec map_succ_aux (is_trace, state_list) = function
     | v::tl ->
     (*Printf.fprintf !log_channel "-state built-\n";
@@ -1097,7 +1097,7 @@ let map_succ gram_rhs gram_lhs gram_parnt bnt_array lhs_table (*nt_of_ind prio_o
 
 
 
-let make_entry_point_state entry_points stations gram_rhs gram_lhs gram_parnt bnt_array lhs_table str_non_ter str_ter regexp_array r_L array_lt_ter array_lt_ter_nl array_lt_nt array_lt_nt_nl array_lhs succ_states_array non_kernel_array (is_trace, state_list) ep =
+let make_entry_point_state entry_points stations _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ (is_trace, state_list) ep =
   (*let lhs_ind_set =
     Prio_map.fold
     (fun p lhs_ind set -> Int_set.add lhs_ind set)
@@ -1142,7 +1142,7 @@ let make_entry_point_state entry_points stations gram_rhs gram_lhs gram_parnt bn
     (* is it really necessary to have v in state_list ? *)
 
 
-let build_automaton_LR0 is_trace (gram_rhs:rhs array) (gram_lhs:((int list) * (int option)) array) gram_lhs' gram_parnt bnt_array (*prio_dat*) it_nb (*array_nt_prio nt_of_ind prio_of_ind lhslists*) r_L lhs_table ist_nt_nb token_nb str_non_ter str_ter entry_points_list regexp_array implicit_rule =
+let build_automaton_LR0 is_trace (gram_rhs:rhs array) (gram_lhs:((int list) * (int option)) array) gram_lhs' gram_parnt bnt_array (*prio_dat*) _ (*array_nt_prio nt_of_ind prio_of_ind lhslists*) r_L lhs_table _ token_nb str_non_ter str_ter entry_points_list regexp_array implicit_rule =
   
   let array_lt_ter = Array.make token_nb None in
   let array_lt_ter_nl = Array.make token_nb None in

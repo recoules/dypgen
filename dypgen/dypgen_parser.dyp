@@ -1,5 +1,4 @@
 {
-open Printf
 open Parse_tree
 open Dyp
 
@@ -21,7 +20,7 @@ let empty_ppi = {
 module Ordered_string =
 struct
   type t = string
-  let compare = Pervasives.compare
+  let compare = Stdlib.compare
 end
 
 module String_set = Set.Make(Ordered_string)
@@ -48,7 +47,7 @@ let dummy_p = -1,-1,-1,""
 let dummy_pat_inh = "_", (Pat_inh ""), Lexing.dummy_pos
 
 let symbol_list dyp op (symb, add_rules) =
-  let { gd_count=count; gd_symbs=symbs} = dyp.global_data in
+  let { gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
   let pat_typ = match symb with
     | Symb_non_terminal ((s,_),_,_,_)
     | Symb_non_terminal_NL ((s,_),_,_,_) -> s
@@ -104,7 +103,7 @@ let discard_nt nt =
   is_nested nt
 
 let rec dyp_merge_Obj_symbol_list = function
-  | ((o1,gd,ld) as h)::((o2,_,_)::t as l1) ->
+  | ((o1,_,_) as h)::((_,_,_)::t as l1) ->
   begin match o1 with
   (*| (((Symb_regexp (RE_Seq _)),_)::_,_,_,_)
     | (((Symb_regexp_NL (RE_Seq _)),_)::_,_,_,_) ->
@@ -396,7 +395,7 @@ symbol:
   | symb STAR @{ symbol_list dyp "star" $1 }
   | symb PLUS @{ symbol_list dyp "plus" $1 }
   | symb<symb,add_rules> QUESTION
-    @{ let {gd_count=count; gd_symbs=symbs} = dyp.global_data in
+    @{ let {gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
       let pat_typ = match symb with
         | Symb_non_terminal ((s,_),_,_,_)
         | Symb_non_terminal_NL ((s,_),_,_,_) -> s
@@ -471,7 +470,7 @@ symb:
       ((n,dummy_p),("No_priority",dummy_p),Pr_eq,$3)), [] }
   | DASH UIDENT { (Symb_terminal_NL $2),[] }
   | LBRACK rhs_list RBRACK
-    @{ let { gd_count=count; gd_symbs=symbs} = dyp.global_data in
+    @{ let { gd_count=count; gd_symbs=symbs; _} = dyp.global_data in
       let nt = "dypgen__nested_nt_"^(string_of_int count) in
       let f (rl1,rl2) (prio,symbl,code,allow_layout,add_rules) =
         ((nt,[dummy_pat_inh]),prio,symbl,code,allow_layout)::rl1,add_rules@rl2

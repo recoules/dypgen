@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name calc)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets calc_parser.mli calc_parser.ml)

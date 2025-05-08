@@ -3,7 +3,7 @@
  (name forest)
  (modules_without_implementation forest_parser_debug parse_tree)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets forest_parser.mli forest_parser.ml)

@@ -2,7 +2,7 @@
  (promote (until-clean))
  (name position)
  (libraries dyp)
- (flags -w -27-32))
+ (flags :standard -w -27-32))
 
 (rule
  (targets position_parser.mli position_parser.ml)
